@@ -8,4 +8,7 @@ description      'Installs/Configures osl-acme'
 long_description 'Installs/Configures osl-acme'
 version          '0.1.0'
 
+depends          'acme', '~> 3.0.0'
+
+supports         'centos', '~> 6.0'
 supports         'centos', '~> 7.0'
