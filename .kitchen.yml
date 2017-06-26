@@ -3,3 +3,8 @@ suites:
   - name: default
     run_list:
       - recipe[osl-acme::default]
+  - name: server
+    driver:
+      flavor_ref: 'm1.medium'
+    run_list:
+      - recipe[osl-acme::server]

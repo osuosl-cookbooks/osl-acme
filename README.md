@@ -1,57 +1,34 @@
 osl-acme Cookbook
 =================
-TODO: Enter the cookbook description here.
 
-e.g.
-This cookbook makes your favorite breakfast sandwich.
+OSL wrapper cookbook for ACME (LetsEncrypt) utilizing the
+[acme](https://supermarket.chef.io/cookbooks/acme) and
+[osl-letsencrypt-boulder-server](https://github.com/osuosl-cookbooks/osl-letsencrypt-boulder-server)
+cookbooks.
 
 Requirements
 ------------
-TODO: List your cookbook requirements. Be sure to include any
-requirements this cookbook has on platforms, libraries, other cookbooks,
-packages, operating systems, etc.
 
-e.g.
-#### packages
-- `toaster` - osl-acme needs toaster to brown your bagel.
+ - Chef 12.18.x and higher
 
 Attributes
 ----------
-TODO: List your cookbook attributes here.
-
-e.g.
-#### osl-acme::default
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['osl-acme']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
-  </tr>
-</table>
 
 Usage
 -----
 #### osl-acme::default
-TODO: Write usage instructions for each cookbook.
 
-e.g.
-Just include `osl-acme` in your node's `run_list`:
+This includes the default recipe for the acme cookbook and sets the contact
+information to our default email.
 
-```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[osl-acme]"
-  ]
-}
-```
+#### osl-acme::server
+
+This installs and starts [Boulder](https://github.com/letsencrypt/boulder) which
+is the CA server behind LetsEncrypt. This allows us to do full test integration
+for LetsEncrypt.
+
+  NOTE: This recipe should NEVER be used in production. It is only used for
+  testing.
 
 Contributing
 ------------
