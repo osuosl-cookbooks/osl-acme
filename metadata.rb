@@ -6,7 +6,7 @@ issues_url       'https://github.com/osuosl-cookbooks/osl-acme/issues'
 source_url       'https://github.com/osuosl-cookbooks/osl-acme'
 description      'Installs/Configures osl-acme'
 long_description 'Installs/Configures osl-acme'
-version          '1.0.0'
+version          '1.1.0'
 
 depends          'acme', '~> 3.0.0'
 depends          'compat_resource', '>= 12.19'
