@@ -1,7 +1,8 @@
 name             'osl-acme'
 maintainer       'Oregon State University'
 maintainer_email 'chef@osuosl.org'
-license          'apachev2'
+license          'Apache-2.0'
+chef_version     '>= 12.18' if respond_to?(:chef_version)
 issues_url       'https://github.com/osuosl-cookbooks/osl-acme/issues'
 source_url       'https://github.com/osuosl-cookbooks/osl-acme'
 description      'Installs/Configures osl-acme'
