@@ -13,7 +13,6 @@ depends          'acme', '~> 3.0.0'
 depends          'compat_resource', '>= 12.19'
 depends          'osl-letsencrypt-boulder-server'
 depends          'poise-python'
-depends          'rabbitmq', '~> 5.0'
 
 supports         'centos', '~> 6.0'
 supports         'centos', '~> 7.0'
