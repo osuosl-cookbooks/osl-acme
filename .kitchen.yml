@@ -8,3 +8,5 @@ suites:
       flavor_ref: 'm1.medium'
     run_list:
       - recipe[osl-acme::server]
+    excludes:
+      - centos-6
