@@ -1,0 +1,4 @@
+cookbook=osl-acme
+version=1.1.0
+envs=~
+pr_link=https://github.com/osuosl-cookbooks/osl-acme/pull/3
