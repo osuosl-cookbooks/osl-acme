@@ -10,3 +10,5 @@ suites:
       - recipe[osl-acme::server]
     excludes:
       - centos-6
+verifier:
+  name: inspec
