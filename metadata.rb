@@ -10,7 +10,6 @@ long_description 'Installs/Configures osl-acme'
 version          '2.0.0'
 
 depends          'acme', '~> 4.0.0'
-depends          'compat_resource', '>= 12.19'
 depends          'osl-letsencrypt-boulder-server'
 depends          'poise-python'
 
