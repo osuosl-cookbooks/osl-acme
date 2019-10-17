@@ -7,7 +7,7 @@ issues_url       'https://github.com/osuosl-cookbooks/osl-acme/issues'
 source_url       'https://github.com/osuosl-cookbooks/osl-acme'
 description      'Installs/Configures osl-acme'
 long_description 'Installs/Configures osl-acme'
-version          '2.1.0'
+version          '2.2.0'
 
 depends          'acme', '~> 4.1.1'
 depends          'osl-letsencrypt-boulder-server'

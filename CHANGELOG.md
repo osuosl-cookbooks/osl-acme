@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+2.2.0 (2019-10-17)
+------------------
+- Update upstream acme cookbook to ~> 4.1.1
+
 2.1.0 (2019-08-26)
 ------------------
 - Chef 14 compatability fixes
