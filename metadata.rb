@@ -10,7 +10,8 @@ long_description 'Installs/Configures osl-acme'
 version          '2.2.0'
 
 depends          'acme', '~> 4.1.1'
-depends          'osl-letsencrypt-boulder-server'
+depends          'git'
+depends          'resolver'
 
 supports         'centos', '~> 6.0'
 supports         'centos', '~> 7.0'
