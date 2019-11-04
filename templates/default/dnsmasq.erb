@@ -1,0 +1,5 @@
+<% node['osl-acme']['pebble']['host_aliases'].each do |host| -%>
+address=/<%= host %>/<%= node['ipaddress'] %>
+<% end -%>
+no-resolv
+server=140.211.166.130

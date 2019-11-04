@@ -1,14 +1,16 @@
 ---
+verifier:
+  name: inspec
 suites:
   - name: default
     run_list:
       - recipe[osl-acme::default]
   - name: server
-    driver:
-      flavor_ref: 'm1.medium'
     run_list:
       - recipe[osl-acme::server]
-    excludes:
-      - centos-6
-verifier:
-  name: inspec
+      - recipe[acme_test]
+    attributes:
+      osl-acme:
+        pebble:
+          host_aliases:
+            - foo.org

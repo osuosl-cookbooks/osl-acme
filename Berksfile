@@ -1,7 +1,12 @@
 source 'https://supermarket.chef.io'
 
-cookbook 'osl-letsencrypt-boulder-server', git: 'git@github.com:osuosl-cookbooks/osl-letsencrypt-boulder-server.git'
-cookbook 'osl-docker', git: 'git@github.com:osuosl-cookbooks/osl-docker.git'
+cookbook 'acme_test', path: 'test/cookbooks/acme_test'
 cookbook 'firewall', git: 'git@github.com:osuosl-cookbooks/firewall.git'
+cookbook 'osl-apache', git: 'git@github.com:osuosl-cookbooks/osl-apache'
+cookbook 'osl-munin', git: 'git@github.com:osuosl-cookbooks/osl-munin'
+cookbook 'osl-nrpe', git: 'git@github.com:osuosl-cookbooks/osl-nrpe'
+cookbook 'osl-php', git: 'git@github.com:osuosl-cookbooks/osl-php'
+cookbook 'osl-rsync', git: 'git@github.com:osuosl-cookbooks/osl-rsync'
+cookbook 'osl-selinux', git: 'git@github.com:osuosl-cookbooks/osl-selinux'
 
 metadata

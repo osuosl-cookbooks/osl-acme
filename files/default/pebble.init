@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+# pebble    Start/Stop pebble
+#
+# chkconfig: 2345 90 60
+# description: Pebble is a small RFC 8555 ACME test server
+
+### BEGIN INIT INFO
+# Provides: pebble
+# Required-Start: $local_fs $syslog
+# Required-Stop: $local_fs $syslog
+# Default-Start:  2345
+# Default-Stop: 90
+# Short-Description: Pebble
+# Description: Pebble is a small RFC 8555 ACME test server
+### END INIT INFO
+
+RETVAL=0
+prog="pebble"
+exec=/usr/local/bin/$prog
+lockfile=/var/lock/subsys/$prog
+pidfile=/var/run/$prog
+RETVAL=0
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+start() {
+
+  echo -n $"Starting $prog: "
+  cd /opt/pebble
+  export PEBBLE_VA_ALWAYS_VALID=1
+  export PEBBLE_VA_NOSLEEP=1
+  export PEBBLE_WFE_NONCEREJECT=0
+  daemon --user $prog "nohup $exec -config /opt/pebble/test/config/pebble-config.json > /tmp/pebble.log" &
+  retval=$?
+  if [ $retval -eq 0 ] ; then
+    touch $lockfile
+    ps aux | grep $exec | grep -v grep | tr -s " " | cut -d " " -f2 > $pidfile
+  fi
+  echo
+  return $retval
+}
+
+stop() {
+  echo -n $"Stopping $prog: "
+  killproc $exec
+  retval=$?
+  if [ $retval -eq 0 ] ; then
+    rm -f $lockfile
+    rm -f $pidfile
+    success; echo
+  else
+    failure; echo
+  fi
+  return $retval
+}
+
+restart() {
+  stop
+  start
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    restart
+    ;;
+  status)
+    status $prog
+    retval=$?
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|restart|status}"
+    retval=2
+esac
+
+exit $retval

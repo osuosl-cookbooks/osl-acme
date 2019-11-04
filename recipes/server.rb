@@ -15,4 +15,72 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-include_recipe 'osl-letsencrypt-boulder-server'
+node.default['acme']['dir'] = 'https://127.0.0.1:14000/dir'
+
+package 'dnsmasq'
+
+template '/etc/dnsmasq.conf' do
+  source 'dnsmasq.erb'
+  variables(
+    hosts: node['osl-acme']['pebble']['host_aliases']
+  )
+  notifies :restart, 'service[dnsmasq]', :immediately
+end
+
+service 'dnsmasq' do
+  action [:start, :enable]
+end
+
+node.default['resolver']['domain'] = 'example.org'
+node.default['resolver']['search'] = 'example.org'
+node.default['resolver']['nameservers'] = %w(127.0.0.1)
+
+include_recipe 'resolver'
+include_recipe 'git'
+
+remote_file '/usr/local/bin/pebble' do
+  source "http://packages.osuosl.org/distfiles/pebble-#{node['osl-acme']['pebble']['version']}"
+  checksum '902e061d9c563d8cbf9a56b2c299898f99a0da4ec3a8d8d7ef5d5e68de9cdb39'
+  mode '0755'
+end
+
+user 'pebble' do
+  system true
+end
+
+directory '/opt/pebble' do
+  user 'pebble'
+end
+
+git '/opt/pebble' do
+  user 'pebble'
+  repository 'https://github.com/letsencrypt/pebble.git'
+  depth 1
+  revision node['osl-acme']['pebble']['version']
+end
+
+# Needed for the acme-client gem to continue connecting to pebble;
+# please do NOT do this on production Chef nodes!
+bash 'update Chef trusted certificates store' do
+  code <<-EOC
+  cat /opt/pebble/test/certs/pebble.minica.pem >> /opt/chef/embedded/ssl/certs/cacert.pem
+  touch /opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED
+  EOC
+  creates '/opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED'
+end
+
+if node['init_package'] == 'systemd'
+  systemd_unit 'pebble.service' do
+    content node['osl-acme']['pebble']['systemd']
+    action [:create, :enable, :start]
+  end
+else
+  cookbook_file '/etc/init.d/pebble' do
+    source 'pebble.init'
+    mode '0755'
+  end
+
+  service 'pebble' do
+    action [:enable, :start]
+  end
+end
