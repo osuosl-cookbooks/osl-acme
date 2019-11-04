@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+3.0.0 (2019-11-04)
+------------------
+- Refactor server recipe to use Pebble server
+
 2.2.0 (2019-10-17)
 ------------------
 - Update upstream acme cookbook to ~> 4.1.1
