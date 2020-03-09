@@ -13,5 +13,6 @@ depends          'acme', '~> 4.1.1'
 depends          'git'
 depends          'resolver'
 
-supports         'centos', '~> 6.0'
+# TODO: DO NOT BUMP ON production_centos6 and phpbb until migration
 supports         'centos', '~> 7.0'
+supports         'centos', '~> 8.0'
