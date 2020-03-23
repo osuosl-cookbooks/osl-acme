@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+3.1.0 (2020-03-23)
+------------------
+- Add c8 compatibility 
+
 3.0.1 (2019-12-10)
 ------------------
 - Chef 14 post-migration fixes
