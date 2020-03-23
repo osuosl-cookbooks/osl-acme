@@ -13,5 +13,5 @@ depends          'acme', '~> 4.1.1'
 depends          'git'
 depends          'resolver'
 
-supports         'centos', '~> 6.0'
 supports         'centos', '~> 7.0'
+supports         'centos', '~> 8.0'

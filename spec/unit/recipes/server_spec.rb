@@ -61,34 +61,17 @@ describe 'osl-acme::server' do
             creates: '/opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED'
           )
       end
-      case p
-      when CENTOS_7
-        it do
-          expect(chef_run).to create_systemd_unit('pebble.service')
-            .with(
-              content: "[Unit]\nDescription=Pebble is a small RFC 8555 ACME test server\nAfter=network.target\n[Service]\nWorkingDirectory=/opt/pebble\nUser=pebble\nEnvironment=PEBBLE_VA_ALWAYS_VALID=1\nEnvironment=PEBBLE_VA_NOSLEEP=1\nEnvironment=PEBBLE_WFE_NONCEREJECT=0\nExecStart=/usr/local/bin/pebble -config /opt/pebble/test/config/pebble-config.json\n[Install]\nWantedBy=multi-user.target\n"
-            )
-        end
-        it do
-          expect(chef_run).to enable_systemd_unit('pebble.service')
-        end
-        it do
-          expect(chef_run).to start_systemd_unit('pebble.service')
-        end
-      when CENTOS_6
-        it do
-          expect(chef_run).to create_cookbook_file('/etc/init.d/pebble')
-            .with(
-              source: 'pebble.init',
-              mode: '0755'
-            )
-        end
-        it do
-          expect(chef_run).to start_service('pebble')
-        end
-        it do
-          expect(chef_run).to enable_service('pebble')
-        end
+      it do
+        expect(chef_run).to create_systemd_unit('pebble.service')
+          .with(
+            content: "[Unit]\nDescription=Pebble is a small RFC 8555 ACME test server\nAfter=network.target\n[Service]\nWorkingDirectory=/opt/pebble\nUser=pebble\nEnvironment=PEBBLE_VA_ALWAYS_VALID=1\nEnvironment=PEBBLE_VA_NOSLEEP=1\nEnvironment=PEBBLE_WFE_NONCEREJECT=0\nExecStart=/usr/local/bin/pebble -config /opt/pebble/test/config/pebble-config.json\n[Install]\nWantedBy=multi-user.target\n"
+          )
+      end
+      it do
+        expect(chef_run).to enable_systemd_unit('pebble.service')
+      end
+      it do
+        expect(chef_run).to start_systemd_unit('pebble.service')
       end
     end
   end

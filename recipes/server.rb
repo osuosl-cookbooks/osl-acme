@@ -69,18 +69,7 @@ bash 'update Chef trusted certificates store' do
   creates '/opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED'
 end
 
-if node['init_package'] == 'systemd'
-  systemd_unit 'pebble.service' do
-    content node['osl-acme']['pebble']['systemd']
-    action [:create, :enable, :start]
-  end
-else
-  cookbook_file '/etc/init.d/pebble' do
-    source 'pebble.init'
-    mode '0755'
-  end
-
-  service 'pebble' do
-    action [:enable, :start]
-  end
+systemd_unit 'pebble.service' do
+  content node['osl-acme']['pebble']['systemd']
+  action [:create, :enable, :start]
 end
