@@ -57,8 +57,8 @@ describe 'osl-acme::server' do
       it do
         expect(chef_run).to run_bash('update Chef trusted certificates store')
           .with(
-            code: "  cat /opt/pebble/test/certs/pebble.minica.pem >> /opt/chef/embedded/ssl/certs/cacert.pem\n  touch /opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED\n",
-            creates: '/opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED'
+            code: 'cat /opt/pebble/test/certs/pebble.minica.pem >> /opt/cinc/embedded/ssl/certs/cacert.pem; touch /opt/cinc/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED',
+            creates: '/opt/cinc/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED'
           )
       end
       it do
