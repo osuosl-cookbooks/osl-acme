@@ -61,12 +61,10 @@ end
 
 # Needed for the acme-client gem to continue connecting to pebble;
 # please do NOT do this on production Chef nodes!
+chef_cinc = node['chef_packages']['chef']['version'].to_i >= 15 ? 'cinc' : 'chef'
 bash 'update Chef trusted certificates store' do
-  code <<-EOC
-  cat /opt/pebble/test/certs/pebble.minica.pem >> /opt/chef/embedded/ssl/certs/cacert.pem
-  touch /opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED
-  EOC
-  creates '/opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED'
+  code "cat /opt/pebble/test/certs/pebble.minica.pem >> /opt/#{chef_cinc}/embedded/ssl/certs/cacert.pem; touch /opt/#{chef_cinc}/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED"
+  creates "/opt/#{chef_cinc}/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED"
 end
 
 systemd_unit 'pebble.service' do
