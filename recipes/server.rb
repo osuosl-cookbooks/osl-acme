@@ -2,7 +2,7 @@
 # Cookbook:: osl-acme
 # Recipe:: server
 #
-# Copyright:: 2017, Oregon State University
+# Copyright:: 2017-2020, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,12 +61,10 @@ end
 
 # Needed for the acme-client gem to continue connecting to pebble;
 # please do NOT do this on production Chef nodes!
+chef_path = node['chef_packages']['chef']['version'].to_i >= 15 ? 'cinc' : 'chef'
 bash 'update Chef trusted certificates store' do
-  code <<-EOC
-  cat /opt/pebble/test/certs/pebble.minica.pem >> /opt/chef/embedded/ssl/certs/cacert.pem
-  touch /opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED
-  EOC
-  creates '/opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED'
+  code "cat /opt/pebble/test/certs/pebble.minica.pem >> /opt/#{chef_path}/embedded/ssl/certs/cacert.pem; touch /opt/#{chef_path}/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED"
+  creates "/opt/#{chef_path}/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED"
 end
 
 systemd_unit 'pebble.service' do

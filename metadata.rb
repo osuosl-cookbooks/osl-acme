@@ -6,11 +6,10 @@ chef_version     '>= 14.0'
 issues_url       'https://github.com/osuosl-cookbooks/osl-acme/issues'
 source_url       'https://github.com/osuosl-cookbooks/osl-acme'
 description      'Installs/Configures osl-acme'
-long_description 'Installs/Configures osl-acme'
 version          '3.1.0'
 
-depends          'acme', '~> 4.1.1'
-depends          'git'
+depends          'acme', '~> 4.1.2'
+depends          'osl-git'
 depends          'resolver'
 
 supports         'centos', '~> 7.0'

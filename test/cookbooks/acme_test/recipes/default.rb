@@ -1,4 +1,7 @@
+node.default['osl-apache']['listen'] = %w(80 443)
+
 include_recipe 'osl-acme'
+include_recipe 'osl-apache'
 include_recipe 'osl-apache::mod_ssl'
 
 acme_selfsigned 'foo.org' do

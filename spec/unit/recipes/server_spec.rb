@@ -5,6 +5,7 @@ describe 'osl-acme::server' do
     context "#{p[:platform]} #{p[:version]}" do
       cached(:chef_run) do
         ChefSpec::SoloRunner.new(p) do |node|
+          node.automatic['chef_packages']['chef']['version'] = '14.15.6'
           node.normal['osl-acme']['pebble']['host_aliases'] = %w(example.com foo.org)
         end.converge(described_recipe)
       end
@@ -57,10 +58,28 @@ describe 'osl-acme::server' do
       it do
         expect(chef_run).to run_bash('update Chef trusted certificates store')
           .with(
-            code: "  cat /opt/pebble/test/certs/pebble.minica.pem >> /opt/chef/embedded/ssl/certs/cacert.pem\n  touch /opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED\n",
+            code: 'cat /opt/pebble/test/certs/pebble.minica.pem >> /opt/chef/embedded/ssl/certs/cacert.pem; touch /opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED',
             creates: '/opt/chef/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED'
           )
       end
+      context 'Cinc 15' do
+        cached(:chef_run) do
+          ChefSpec::SoloRunner.new(p) do |node|
+            node.automatic['chef_packages']['chef']['version'] = '15.11.3'
+          end.converge(described_recipe)
+        end
+        it 'converges successfully' do
+          expect { chef_run }.to_not raise_error
+        end
+        it do
+          expect(chef_run).to run_bash('update Chef trusted certificates store')
+            .with(
+              code: 'cat /opt/pebble/test/certs/pebble.minica.pem >> /opt/cinc/embedded/ssl/certs/cacert.pem; touch /opt/cinc/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED',
+              creates: '/opt/cinc/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED'
+            )
+        end
+      end
+
       it do
         expect(chef_run).to create_systemd_unit('pebble.service')
           .with(
