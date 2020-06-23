@@ -9,7 +9,7 @@ description      'Installs/Configures osl-acme'
 version          '3.1.0'
 
 depends          'acme', '~> 4.1.2'
-depends          'git'
+depends          'osl-git'
 depends          'resolver'
 
 supports         'centos', '~> 7.0'
