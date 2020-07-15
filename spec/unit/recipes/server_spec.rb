@@ -9,6 +9,10 @@ describe 'osl-acme::server' do
           node.normal['osl-acme']['pebble']['host_aliases'] = %w(example.com foo.org)
         end.converge(described_recipe)
       end
+      before do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with('/opt/chef/bin/chef-client').and_return(true)
+      end
       it 'converges successfully' do
         expect { chef_run }.to_not raise_error
       end
@@ -67,6 +71,10 @@ describe 'osl-acme::server' do
           ChefSpec::SoloRunner.new(p) do |node|
             node.automatic['chef_packages']['chef']['version'] = '15.11.3'
           end.converge(described_recipe)
+        end
+        before do
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?).with('/opt/chef/bin/chef-client').and_return(false)
         end
         it 'converges successfully' do
           expect { chef_run }.to_not raise_error

@@ -61,7 +61,7 @@ end
 
 # Needed for the acme-client gem to continue connecting to pebble;
 # please do NOT do this on production Chef nodes!
-chef_path = node['chef_packages']['chef']['version'].to_i >= 15 ? 'cinc' : 'chef'
+chef_path = ::File.exist?('/opt/chef/bin/chef-client') ? 'chef' : 'cinc'
 bash 'update Chef trusted certificates store' do
   code "cat /opt/pebble/test/certs/pebble.minica.pem >> /opt/#{chef_path}/embedded/ssl/certs/cacert.pem; touch /opt/#{chef_path}/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED"
   creates "/opt/#{chef_path}/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED"
