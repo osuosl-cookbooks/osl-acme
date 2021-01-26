@@ -9,6 +9,8 @@ description      'Installs/Configures osl-acme'
 version          '3.2.1'
 
 depends          'acme', '~> 4.1.2'
+depends          'base'
+depends          'osl-docker'
 depends          'osl-git'
 depends          'resolver'
 
