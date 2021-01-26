@@ -23,3 +23,16 @@ suites:
         pebble:
           host_aliases:
             - foo.org
+  - name: acme-dns-server
+    driver:
+      network_ref:
+        - general_servers1
+      security_groups:
+        - default
+        - dns
+    run_list:
+      - recipe[osl-acme::acme_dns_server]
+  - name: acme-dns-client-test
+    run_list:
+      - recipe[osl-acme::default]
+      - recipe[acme_test::acme_dns_client]
