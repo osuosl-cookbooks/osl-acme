@@ -1,0 +1,10 @@
+{
+  "id": "records",
+  "records": {
+    "encrypted_data": "NDQLYGtdo3cGZFNHipUg0yUQ7dS8MKr0UINm5yNonFFdxvFYLvy8DZjOfaKh\nLgjM5X6vwObCQbpGk6BIHPvtPQ/enBhDVkqNAs+JT1vNJfX5NwvGNbt1Rrzs\nWrOvDJef7batwJ+KxYnhFyaRBuSi9nOpKyUmeFl+KMc4b7JsSSfnwZY1brd4\nhmyAbaF72D2imeZNf3Pf6MGKzmSoMa8dlXbb5Yoc6dNbgcyIpvT2oC6ikiO3\nXU9r0JZd1Nz3ixjzeIRxdnvfcDR2JI9Z75XjCw==\n",
+    "hmac": "KfXCIsgKTyeBNTD8LY4ch8Pi0HqeU0OOWEYfq2fLHqI=\n",
+    "iv": "9QdoDwvFHqpGoesLRnfakw==\n",
+    "version": 2,
+    "cipher": "aes-256-cbc"
+  }
+}

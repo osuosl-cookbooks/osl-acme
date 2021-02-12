@@ -1,5 +1,4 @@
 require 'net/http'
-require 'acme-client'
 require 'openssl'
 require 'uri'
 require 'json'
@@ -9,7 +8,7 @@ provides :get_acme_cert
 
 default_action :create
 
-property :domain, String, default: lazy { name }
+property :domain, String, name_property: true
 property :alt_names, Array, default: []
 property :contact, String
 property :acme_directory, String
@@ -18,7 +17,7 @@ property :acme_dns_api_subdomain, String
 property :acme_dns_api_username, String
 property :acme_dns_api_key, String
 property :cert_path, String
-property :private_key, OpenSSL::PKey::RSA, default: lazy { OpenSSL::Pkey::RSA.new(4096) }
+property :private_key, OpenSSL::PKey::RSA, default: lazy { OpenSSL::PKey::RSA.new(4096) }
 
 ##################################################################################
 # Steps:                                                                         #
@@ -33,28 +32,36 @@ property :private_key, OpenSSL::PKey::RSA, default: lazy { OpenSSL::Pkey::RSA.ne
 #    5.2. Cert is saved on disk
 ##################################################################################
 
+action_class do
+  require 'acme-client'
+end
+
 action :create do
-  client = Acme::Client.new(private_key: private_key, directory: acme_directory)
-  client.new_account(contact: "mailto:#{contact}", terms_of_service_agreed: true)
-  order = client.new_order(identifiers: [domain, *alt_names])
+  # Only run if cert doesn't exist, or is expiring in the next 24hr
+  noExpire = system("openssl x509 -checkend 86400 -noout -in #{new_resource.cert_path}")
+  return if noExpire
+
+  client = Acme::Client.new(private_key: new_resource.private_key, directory: new_resource.acme_directory)
+  client.new_account(contact: new_resource.contact, terms_of_service_agreed: true)
+  order = client.new_order(identifiers: [new_resource.domain, *new_resource.alt_names])
 
   # Perform challenges for all identifiers
   order.authorizations.each do |authorization|
     puts "Performing challenge for #{authorization.identifier['value']}"
-    
+
     challenge = authorization.dns
 
     # Update ACME DNS record
-    uri = URI.parse("#{acme_dns_api}/update")
+    uri = URI.parse("#{new_resource.acme_dns_api}/update")
 
     header = {'Content-Type': 'text/json'}
-    body = {subdomain: subdomain, txt: challenge.record_content}
+    body = {subdomain: new_resource.acme_dns_api_subdomain, txt: challenge.record_content}
 
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri, header)
     request.body = body.to_json
-    request['X-Api-User'] = username
-    request['X-Api-Key'] = apikey
+    request['X-Api-User'] = new_resource.acme_dns_api_username
+    request['X-Api-Key'] = new_resource.acme_dns_api_key
 
     response = http.request(request)
 
@@ -72,17 +79,14 @@ action :create do
   end
 
   # Challenges are valid, get cert
-  csr = Acme::Client::CertificateRequest.new(common_name: domain, names: alt_names)
+  csr = Acme::Client::CertificateRequest.new(common_name: new_resource.domain, names: new_resource.alt_names)
   order.finalize(csr: csr)
   while order.status == 'processing'
     sleep(1)
     order.reload
   end
 
-  # Write certificate
-  File.write(cert_path, order.certificate)
-end
-
-action :renew do
-
+  file new_resource.cert_path do
+    content order.certificate
+  end
 end
