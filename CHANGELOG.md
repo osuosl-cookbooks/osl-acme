@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+3.2.2 (2021-02-22)
+------------------
+- Remove munin references to Berksfile
+
 3.2.1 (2020-07-15)
 ------------------
 - terrform compatibility
