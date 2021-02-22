@@ -10,7 +10,7 @@ version          '3.2.1'
 
 depends          'acme', '~> 4.1.2'
 depends          'osl-git'
-depends          'resolver'
+depends          'resolver', '~> 2.0'
 
 supports         'centos', '~> 7.0'
 supports         'centos', '~> 8.0'
