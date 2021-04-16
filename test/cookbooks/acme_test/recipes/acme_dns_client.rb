@@ -2,16 +2,31 @@ chef_gem 'acme-client' do
   compile_time true
 end
 
-execute 'add-ip-192.168.10.1' do
-  command 'ip addr add 192.168.10.1 dev lo'
-  not_if 'ip a show dev lo | grep 192.168.10.1'
+#
+# Configure Bind
+#
+
+bind_service 'default' do
+  action [:create, :start]
 end
 
-records = data_bag_item('osl_acme', 'records')['records']
+cookbook_file '/etc/named.conf'
+
+directory '/var/named/master' do
+  recursive true
+end
+
+template '/var/named/master/db.example.org' do
+  source 'db.example.org.erb'
+  notifies :restart, 'bind_service[default]', :immediately
+end
+
+#
+# Setup PostgreSQL server
+#
 
 include_recipe 'osl-postgresql::server'
 
-# make a test database
 postgresql_database 'testdb'
 
 postgresql_user 'testuser' do
@@ -26,14 +41,6 @@ local   all             all                                     trust
 host    all             all             0.0.0.0/0               trust
   EOF
   notifies :reload, 'service[postgresql]', :immediately
-end
-
-include_recipe 'osl-acme::server'
-include_recipe 'osl-acme::acme_dns_server'
-include_recipe 'osl-acme::default'
-
-edit_resource(:docker_container, 'acme-dns.osuosl.org') do
-  notifies :run, 'execute[create_acmedns_records]', :immediately
 end
 
 # Create some test records for acme-dns
@@ -57,6 +64,29 @@ execute 'create_acmedns_records' do
 
   action :nothing
 end
+
+#
+# Configure acme-dns
+#
+
+execute 'add acme-dns ip' do
+  command "ip addr add #{node['osl-acme']['acme-dns']['ns-address']} dev lo"
+  not_if "ip a show dev lo | grep #{node['osl-acme']['acme-dns']['ns-address']}"
+end
+
+include_recipe 'osl-acme::server'
+include_recipe 'osl-acme::acme_dns_server'
+include_recipe 'osl-acme::default'
+
+edit_resource(:docker_container, 'acme-dns.osuosl.org') do
+  notifies :run, 'execute[create_acmedns_records]', :immediately
+end
+
+#
+# Get certificates for the specified hosts
+#
+
+records = data_bag_item('osl_acme', 'records')['records']
 
 records.each do |record|
   get_acme_cert record['domain'] do

@@ -37,6 +37,12 @@ template '/etc/acme-dns/config/config.cfg' do
   notifies :restart, 'docker_container[acme-dns.osuosl.org]'
 end
 
+dns_address = if node['osl-acme']['acme-dns']['ns-address'] then
+                node['osl-acme']['acme-dns']['ns-address'] + ':'
+              else
+                ''
+              end
+
 docker_image 'joohoi/acme-dns' do
   tag 'latest'
   action :pull
@@ -46,6 +52,6 @@ docker_container 'acme-dns.osuosl.org' do
   repo 'joohoi/acme-dns'
   tag 'latest'
   restart_policy 'always'
-  port ['80:80', '443:443', '192.168.10.1:53:53/tcp', '192.168.10.1:53:53/udp']
+  port ['80:80', '443:443', "#{dns_address}53:53/tcp", "#{dns_address}53:53/udp"]
   volumes ['/etc/acme-dns/config:/etc/acme-dns:ro', '/etc/acme-dns/data:/var/lib/acme-dns']
 end

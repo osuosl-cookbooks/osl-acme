@@ -36,5 +36,8 @@ suites:
       - recipe[osl-acme::acme_dns_server]
   - name: acme-dns-client-test
     run_list:
-      - recipe[acme_test::dns]
       - recipe[acme_test::acme_dns_client]
+    attributes:
+      osl-acme:
+        acme-dns:
+          ns-address: 192.168.10.1

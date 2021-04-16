@@ -6,17 +6,17 @@ listen = "0.0.0.0:53"
 # protocol, "both", "both4", "both6", "udp", "udp4", "udp6" or "tcp", "tcp4", "tcp6"
 protocol = "both"
 # domain name to serve the requests off of
-domain = "<%= node['osl-acme']['acme-dns']['domain'] %>" # "acme-dns1.dassonville.dev"
+domain = "<%= node['osl-acme']['acme-dns']['domain'] %>"
 # zone name server
-nsname = "<%= node['osl-acme']['acme-dns']['nsname'] %>" # "ns.acme-dns1.dassonville.dev"
+nsname = "<%= node['osl-acme']['acme-dns']['nsname'] %>"
 # admin email address, where @ is substituted with .
-nsadmin = "<%= node['osl-acme']['acme-dns']['nsadmin'] %>" # "andrew.dassonville.dev"
+nsadmin = "<%= node['osl-acme']['acme-dns']['nsadmin'] %>"
 # predefined records served in addition to the TXT
 records = [
     # default A - test
-    "<%= node['osl-acme']['acme-dns']['domain'] %>. A <%= node['ipaddress'] %>",
+    "<%= node['osl-acme']['acme-dns']['domain'] %>. A <%= node['osl-acme']['acme-dns']['ns-address'] || node['ipaddress'] %>",
     # A 
-    "<%= node['osl-acme']['acme-dns']['nsname'] %>. A <%= node['ipaddress'] %>",
+    "<%= node['osl-acme']['acme-dns']['nsname'] %>. A <%= node['osl-acme']['acme-dns']['ns-address'] || node['ipaddress'] %>",
     # NS
     "<%= node['osl-acme']['acme-dns']['domain'] %>. NS <%= node['osl-acme']['acme-dns']['nsname'] %>."
 ]
@@ -25,11 +25,9 @@ debug = true
 
 [database]
 # Database engine to use, sqlite3 or postgres
-#engine = "sqlite3"
 engine = "postgres"
 # Connection string, filename for sqlite3 and postgres://$username:$password@$host/$db_name for postgres
 # Please note that the default Docker image uses path /var/lib/acme-dns/acme-dns.db for sqlite3
-#connection = "/var/lib/acme-dns/acme-dns.db"
 connection = "postgres://testuser:testpass@172.17.0.1/testdb?sslmode=disable"
 
 [api]
