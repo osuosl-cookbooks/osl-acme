@@ -46,6 +46,6 @@ docker_container 'acme-dns.osuosl.org' do
   repo 'joohoi/acme-dns'
   tag 'latest'
   restart_policy 'always'
-  port ['80:80', '443:443', '0.0.0.0:53:53/tcp', '0.0.0.0:53:53/udp']
+  port ['80:80', '443:443', '192.168.10.1:53:53/tcp', '192.168.10.1:53:53/udp']
   volumes ['/etc/acme-dns/config:/etc/acme-dns:ro', '/etc/acme-dns/data:/var/lib/acme-dns']
 end

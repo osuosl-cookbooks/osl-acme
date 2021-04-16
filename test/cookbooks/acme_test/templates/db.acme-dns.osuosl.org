@@ -1,0 +1,8 @@
+; vim: set noexpandtab ts=8 sw=8 :
+$ORIGIN .
+$TTL 1
+acme-dns.osuosl.org	IN SOA	ns1.acme-dns.osuosl.org. hostmaster.acme-dns.osuosl.org. 
+			NS	ns1.acme-dns.osuosl.org.
+			A	127.0.0.1
+$ORIGIN acme-dns.osuosl.org.
+ns1			A	192.168.10.1

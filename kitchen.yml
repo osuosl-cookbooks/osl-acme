@@ -36,5 +36,5 @@ suites:
       - recipe[osl-acme::acme_dns_server]
   - name: acme-dns-client-test
     run_list:
-      - recipe[osl-acme::default]
+      - recipe[acme_test::dns]
       - recipe[acme_test::acme_dns_client]
