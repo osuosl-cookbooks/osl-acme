@@ -46,7 +46,6 @@ end
 # Create some test records for acme-dns
 execute 'create_acmedns_records' do
   command <<-EOF
-    sleep 60 &&
     psql -U testuser testdb -c "
       INSERT INTO records (username, subdomain, password, allowfrom)
       VALUES ('cbfed1bb-c0b9-4b24-b212-5b95caa38f98', 'c8d6aeae-3f21-4786-b243-98bbd7c526a5', '\\$2a\\$10\\$f0laY/lEhiNhuNBqNlXqlOGP0OVNzg2mzDrI8bPYk3CTcOMDOFEuy', '[]'),
@@ -54,12 +53,12 @@ execute 'create_acmedns_records' do
     psql -U testuser testdb -c "INSERT INTO txt (subdomain) VALUES ('c8d6aeae-3f21-4786-b243-98bbd7c526a5'), ('2acca63e-1c34-4860-95f3-ba208dd8b0bc')"
   EOF
 
-  not_if <<-EOF
+  only_if <<-EOF
     psql -U testuser testdb -c "
       SELECT COUNT(*) FROM records
       WHERE subdomain = 'c8d6aeae-3f21-4786-b243-98bbd7c526a5' OR subdomain = '2acca63e-1c34-4860-95f3-ba208dd8b0bc'" |
     tr -d '\n' |
-    grep -P 'count -------     2'
+    grep -P 'count -------     0'
   EOF
 
   action :nothing
@@ -96,6 +95,6 @@ records.each do |record|
     acme_dns_api_subdomain record['subdomain']
     acme_dns_api_username record['username']
     acme_dns_api_key record['key']
-    cert_path "/tmp/#{record['domain']}-test.pem"
+    cert_path "/tmp/#{record['domain']}.pem"
   end
 end
