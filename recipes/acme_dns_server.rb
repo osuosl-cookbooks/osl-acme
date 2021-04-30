@@ -34,7 +34,7 @@ end
 
 template '/etc/acme-dns/config/config.cfg' do
   source 'config.cfg.erb'
-  notifies :restart, 'docker_container[acme-dns.osuosl.org]', :immediately
+  notifies :restart, 'docker_container[acme-dns.osuosl.org]'
 end
 
 dns_address = if node['osl-acme']['acme-dns']['ns-address'] then
