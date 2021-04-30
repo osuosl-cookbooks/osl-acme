@@ -1,6 +1,6 @@
 require 'net/http'
 require 'openssl'
-#require 'acme-client'
+# require 'acme-client'
 require 'uri'
 require 'json'
 
@@ -13,14 +13,14 @@ def create_client(private_key, directory, contact)
   require 'acme-client'
   client = Acme::Client.new(private_key: private_key, directory: directory)
   client.new_account(contact: contact, terms_of_service_agreed: true)
-  return client
+  client
 end
 
 def request_record(acme_dns_api)
   require 'acme-client'
   # Update ACME DNS record
   uri = URI.parse("#{acme_dns_api}/request")
-  
+
   http = Net::HTTP.new(uri.host, uri.port)
   request = Net::HTTP::Post.new(uri.request_uri, header)
 
@@ -37,8 +37,8 @@ def perform_challenge(authorization, subdomain, username, key, acme_dns_api)
   # Update ACME DNS record
   uri = URI.parse("#{acme_dns_api}/update")
 
-  header = {'Content-Type': 'text/json'}
-  body = {subdomain: subdomain, txt: challenge.record_content}
+  header = { 'Content-Type': 'text/json' }
+  body = { subdomain: subdomain, txt: challenge.record_content }
 
   http = Net::HTTP.new(uri.host, uri.port)
   request = Net::HTTP::Post.new(uri.request_uri, header)
@@ -63,10 +63,10 @@ def perform_challenge(authorization, subdomain, username, key, acme_dns_api)
   puts challenge
   if challenge.status == 'valid'
     puts "Challenge passed for #{authorization.identifier['value']}!"
-    return true
+    true
   else
     puts "Challenge failed for #{authorization.identifier['value']}, status: #{challenge.status}"
-    return false
+    false
   end
 end
 

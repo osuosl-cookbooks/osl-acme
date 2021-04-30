@@ -2,7 +2,7 @@
 # Cookbook:: osl-acme
 # Recipe:: acme_dns
 #
-# Copyright:: 2017-2020, Oregon State University
+# Copyright:: 2017-2021, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ template '/etc/acme-dns/config/config.cfg' do
   notifies :restart, 'docker_container[acme-dns.osuosl.org]'
 end
 
-dns_address = if node['osl-acme']['acme-dns']['ns-address'] then
+dns_address = if node['osl-acme']['acme-dns']['ns-address']
                 node['osl-acme']['acme-dns']['ns-address'] + ':'
               else
                 ''

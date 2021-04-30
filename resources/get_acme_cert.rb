@@ -38,12 +38,12 @@ action :create do
       new_resource.acme_dns_api_subdomain,
       new_resource.acme_dns_api_username,
       new_resource.acme_dns_api_key,
-      new_resource.acme_dns_api,
+      new_resource.acme_dns_api
     )
 
-    if not valid
+    unless valid
       puts 'Challenge failed!'
-      return
+      break
     end
   end
 

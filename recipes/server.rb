@@ -2,7 +2,7 @@
 # Cookbook:: osl-acme
 # Recipe:: server
 #
-# Copyright:: 2017-2020, Oregon State University
+# Copyright:: 2017-2021, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,8 +41,8 @@ include_recipe 'git'
 
 remote_file '/usr/local/bin/pebble' do
   source 'https://github.com/letsencrypt/pebble/releases/download/v2.3.1/pebble_linux-amd64'
-  #source "http://packages.osuosl.org/distfiles/pebble-#{node['osl-acme']['pebble']['version']}"
-  #checksum '902e061d9c563d8cbf9a56b2c299898f99a0da4ec3a8d8d7ef5d5e68de9cdb39'
+  # source "http://packages.osuosl.org/distfiles/pebble-#{node['osl-acme']['pebble']['version']}"
+  # checksum '902e061d9c563d8cbf9a56b2c299898f99a0da4ec3a8d8d7ef5d5e68de9cdb39'
   mode '0755'
 end
 
