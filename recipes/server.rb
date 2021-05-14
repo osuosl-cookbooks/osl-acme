@@ -70,6 +70,21 @@ bash 'update Chef trusted certificates store' do
 end
 
 systemd_unit 'pebble.service' do
-  content node['osl-acme']['pebble']['systemd']
+  content <<-EOF.gsub(/^\s+/, '')
+    [Unit]
+    Description=Pebble is a small RFC 8555 ACME test server
+    After=network.target
+
+    [Service]
+    WorkingDirectory=/opt/pebble
+    User=pebble
+    Environment=PEBBLE_VA_ALWAYS_VALID=#{node['osl-acme']['pebble']['always_valid'] ? '1' : '0'}
+    Environment=PEBBLE_VA_NOSLEEP=1
+    Environment=PEBBLE_WFE_NONCEREJECT=0
+    ExecStart=#{node['osl-acme']['pebble']['command']}
+
+    [Install]
+    WantedBy=multi-user.target
+  EOF
   action [:create, :enable, :start]
 end

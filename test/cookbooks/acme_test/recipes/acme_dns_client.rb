@@ -1,3 +1,6 @@
+node.default['osl-acme']['pebble']['always_valid'] = false
+node.default['osl-acme']['pebble']['command'] = '/usr/local/bin/pebble -config /opt/pebble/test/config/pebble-config.json -dnsserver :8053'
+
 chef_gem 'acme-client' do
   compile_time true
 end
