@@ -40,9 +40,8 @@ include_recipe 'resolver'
 include_recipe 'git'
 
 remote_file '/usr/local/bin/pebble' do
-  source 'https://github.com/letsencrypt/pebble/releases/download/v2.3.1/pebble_linux-amd64'
-  # source "http://packages.osuosl.org/distfiles/pebble-#{node['osl-acme']['pebble']['version']}"
-  # checksum '902e061d9c563d8cbf9a56b2c299898f99a0da4ec3a8d8d7ef5d5e68de9cdb39'
+  source "https://github.com/letsencrypt/pebble/releases/download/#{node['osl-acme']['pebble']['version']}/pebble_linux-amd64"
+  checksum node['osl-acme']['pebble']['checksum']
   mode '0755'
 end
 

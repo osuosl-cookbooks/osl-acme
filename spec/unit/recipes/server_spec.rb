@@ -40,6 +40,7 @@ describe 'osl-acme::server' do
         expect(chef_run).to create_remote_file('/usr/local/bin/pebble')
           .with(
             source: 'https://github.com/letsencrypt/pebble/releases/download/v2.3.1/pebble_linux-amd64',
+            checksum: '60a401159d5132411c88e93ff03ba3322d4ecc7fdba78503da552018f3f98230',
             mode: '0755'
           )
       end
@@ -55,7 +56,7 @@ describe 'osl-acme::server' do
             user: 'pebble',
             repository: 'https://github.com/letsencrypt/pebble.git',
             depth: 1,
-            revision: 'v1.0.1'
+            revision: 'v2.3.1'
           )
       end
       it do
