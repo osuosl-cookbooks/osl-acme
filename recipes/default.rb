@@ -18,8 +18,4 @@
 node.default['acme']['contact'] = 'mailto:letsencrypt@osuosl.org'
 node.default['acme']['renew'] = 32
 
-chef_gem 'acme-client' do
-  compile_time true
-end
-
 include_recipe 'acme'
