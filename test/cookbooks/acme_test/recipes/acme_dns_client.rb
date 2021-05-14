@@ -50,9 +50,8 @@ end
 # Configure acme-dns
 #
 
-execute 'add acme-dns ip' do
-  command "ip addr add #{node['osl-acme']['acme-dns']['ns-address']} dev lo"
-  not_if "ip a show dev lo | grep #{node['osl-acme']['acme-dns']['ns-address']}"
+osl_fakenic 'lo' do
+  ip4 node['osl-acme']['acme-dns']['ns-address']
 end
 
 include_recipe 'osl-acme::server'
@@ -68,7 +67,7 @@ end
 #
 
 execute 'wait_for_acmedns' do
-  command 'until ping -c1 192.168.10.1 >/dev/null 2>&1; do :; done'
+  command "until ping -c1 #{node['osl-acme']['acme-dns']['ns-address']} >/dev/null 2>&1; do :; done"
 end
 
 # Create some test records for acme-dns
