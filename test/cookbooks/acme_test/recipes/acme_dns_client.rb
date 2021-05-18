@@ -26,11 +26,13 @@ end
 
 include_recipe 'osl-postgresql::server'
 
-postgresql_database 'testdb'
+db_config = data_bag_item('osl_acme', 'database')
 
-postgresql_user 'testuser' do
-  database 'testdb'
-  password 'testpass'
+postgresql_database db_config['dbname']
+
+postgresql_user db_config['user'] do
+  database db_config['dbname']
+  password db_config['pass']
   action :create
 end
 
@@ -69,15 +71,15 @@ end
 # Create some test records for acme-dns
 execute 'create_acmedns_records' do
   command <<-EOF
-    psql -U testuser testdb -c "
+    psql -U #{db_config['user']} #{db_config['dbname']} -c "
       INSERT INTO records (username, subdomain, password, allowfrom)
       VALUES ('cbfed1bb-c0b9-4b24-b212-5b95caa38f98', 'c8d6aeae-3f21-4786-b243-98bbd7c526a5', '\\$2a\\$10\\$f0laY/lEhiNhuNBqNlXqlOGP0OVNzg2mzDrI8bPYk3CTcOMDOFEuy', '[]'),
              ('c6853765-5036-4f01-9325-c7b97ee0fb2e', '2acca63e-1c34-4860-95f3-ba208dd8b0bc', '\\$2a\\$10\\$J8Dhe8YYcD44.KTCxHxdY.wUvL8aqvIjpObP6pKT4vVmk1HQet/Fi', '[]')" &&
-    psql -U testuser testdb -c "INSERT INTO txt (subdomain) VALUES ('c8d6aeae-3f21-4786-b243-98bbd7c526a5'), ('2acca63e-1c34-4860-95f3-ba208dd8b0bc')"
+    psql -U #{db_config['user']} #{db_config['dbname']} -c "INSERT INTO txt (subdomain) VALUES ('c8d6aeae-3f21-4786-b243-98bbd7c526a5'), ('2acca63e-1c34-4860-95f3-ba208dd8b0bc')"
   EOF
 
   only_if <<-EOF
-    psql -U testuser testdb -c "
+    psql -U #{db_config['user']} #{db_config['dbname']} -c "
       SELECT COUNT(*) FROM records
       WHERE subdomain = 'c8d6aeae-3f21-4786-b243-98bbd7c526a5' OR subdomain = '2acca63e-1c34-4860-95f3-ba208dd8b0bc'" |
     tr -d '\n' |

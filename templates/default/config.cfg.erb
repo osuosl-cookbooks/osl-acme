@@ -28,7 +28,7 @@ debug = true
 engine = "postgres"
 # Connection string, filename for sqlite3 and postgres://$username:$password@$host/$db_name for postgres
 # Please note that the default Docker image uses path /var/lib/acme-dns/acme-dns.db for sqlite3
-connection = "postgres://testuser:testpass@172.17.0.1/testdb?sslmode=disable"
+connection = "postgres://<%= pg_user %>:<%= pg_pass %>@<%= pg_host %>/<%= pg_dbname %>?sslmode=disable"
 
 [api]
 # listen ip eg. 127.0.0.1

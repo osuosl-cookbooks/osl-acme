@@ -32,8 +32,14 @@ directory '/etc/acme-dns/data' do
   action :create
 end
 
+db_config = data_bag_item('osl_acme', 'database')
+
 template '/etc/acme-dns/config/config.cfg' do
   source 'config.cfg.erb'
+  variables(pg_host: db_config['host'],
+            pg_user: db_config['user'],
+            pg_pass: db_config['pass'],
+            pg_dbname: db_config['dbname'])
   notifies :restart, 'docker_container[acme-dns.osuosl.org]'
 end
 
