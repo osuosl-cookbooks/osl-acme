@@ -1,6 +1,6 @@
 #
 # Cookbook:: osl-acme
-# Recipe:: acme_dns
+# Recipe:: acme_dns_server
 #
 # Copyright:: 2017-2021, Oregon State University
 #
