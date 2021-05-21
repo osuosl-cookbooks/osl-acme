@@ -26,12 +26,6 @@ directory '/etc/acme-dns/config' do
   action :create
 end
 
-# TODO: this can be removed after switching to postgres
-directory '/etc/acme-dns/data' do
-  recursive true
-  action :create
-end
-
 db_config = data_bag_item('osl_acme', 'database')
 
 template '/etc/acme-dns/config/config.cfg' do
@@ -50,14 +44,14 @@ dns_address = if node['osl-acme']['acme-dns']['ns-address']
               end
 
 docker_image 'joohoi/acme-dns' do
-  tag 'latest'
+  tag node['osl-acme']['acme-dns']['version']
   action :pull
 end
 
 docker_container 'acme-dns.osuosl.org' do
   repo 'joohoi/acme-dns'
-  tag 'latest'
+  tag node['osl-acme']['acme-dns']['version']
   restart_policy 'always'
   port ['80:80', '443:443', "#{dns_address}53:53/tcp", "#{dns_address}53:53/udp"]
-  volumes ['/etc/acme-dns/config:/etc/acme-dns:ro', '/etc/acme-dns/data:/var/lib/acme-dns']
+  volumes ['/etc/acme-dns/config:/etc/acme-dns:ro']
 end

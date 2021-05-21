@@ -30,6 +30,11 @@ for LetsEncrypt.
   NOTE: This recipe should NEVER be used in production. It is only used for
   testing.
 
+#### osl-acme::acme_dns_server
+
+This configures an [acme-dns](https://github.com/joohoi/acme-dns) instance in a
+Docker container.
+
 Contributing
 ------------
 
