@@ -5,8 +5,11 @@ require 'uri'
 require 'json'
 
 def get_cert_or_nil(path)
-  puts "Getting #{path}"
   return OpenSSL::X509::Certificate.new(File.read(path)) if File.exist?(path)
+end
+
+def get_key_or_nil(path)
+  return OpenSSL::PKey::RSA.new(File.read(path)) if File.exist?(path)
 end
 
 def create_client(private_key, directory, contact)

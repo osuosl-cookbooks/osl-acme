@@ -17,7 +17,7 @@ property :acme_dns_api_subdomain, String
 property :acme_dns_api_username, String
 property :acme_dns_api_key, String
 property :cert_path, String
-property :private_key, OpenSSL::PKey::RSA, default: lazy { OpenSSL::PKey::RSA.new(4096) }
+property :key_path, String
 
 action :create do
   existing_cert = get_cert_or_nil(new_resource.cert_path)
@@ -28,7 +28,18 @@ action :create do
     return if ttl > 86400
   end
 
-  client = create_client(new_resource.private_key, new_resource.acme_directory, new_resource.contact)
+  private_key = get_key_or_nil(new_resource.key_path)
+
+  # If key does not exist, generate one and save to file
+  unless private_key
+    private_key = OpenSSL::PKey::RSA.new(2048)
+
+    file new_resource.key_path do
+      content private_key.export()
+    end
+  end
+
+  client = create_client(private_key, new_resource.acme_directory, new_resource.contact)
   order = client.new_order(identifiers: [new_resource.domain, *new_resource.alt_names])
 
   # Perform challenges for all identifiers

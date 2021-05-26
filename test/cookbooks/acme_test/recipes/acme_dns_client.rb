@@ -102,6 +102,7 @@ records.each do |record|
     acme_dns_api_username record['username']
     acme_dns_api_key record['key']
     cert_path "/tmp/#{record['domain']}.pem"
+    key_path "/tmp/#{record['domain']}.key"
 
     action :nothing
 
