@@ -10,6 +10,7 @@ version          '3.3.0'
 
 depends          'acme', '~> 4.1.2'
 depends          'osl-git'
+depends          'osl-selinux'
 depends          'resolver', '~> 2.0'
 
 supports         'centos', '~> 7.0'
