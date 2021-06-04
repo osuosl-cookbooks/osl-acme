@@ -44,6 +44,14 @@ host    all             all             0.0.0.0/0               trust
   notifies :reload, 'service[postgresql]', :immediately
 end
 
+#osl_firewall_port 'postgres' do
+#  osl_only false
+#end
+
+#osl_firewall_dns 'dns' do
+#  osl_only false
+#end
+
 #
 # Configure acme-dns
 #
@@ -56,9 +64,9 @@ include_recipe 'osl-acme::server'
 include_recipe 'osl-acme::acme_dns_server'
 include_recipe 'osl-acme::default'
 
-edit_resource(:docker_container, 'acme-dns.osuosl.org') do
-  notifies :run, 'execute[create_acmedns_records]', :immediately
-end
+#edit_resource(:docker_container, 'acme-dns.osuosl.org') do
+#  notifies :run, 'execute[create_acmedns_records]', :immediately
+#end
 
 #
 # Get certificates for the specified hosts
@@ -95,6 +103,8 @@ end
 records = data_bag_item('osl_acme', 'records')['records']
 records.each do |record|
   get_acme_cert record['domain'] do
+    alt_names record['alt_names']
+
     contact 'mailto:andrew@dassonville.dev'
     acme_directory node['acme']['dir']
     acme_dns_api node['osl-acme']['acme-dns']['api']

@@ -16,42 +16,66 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Enable live-restore to keep containers running when docker restarts
-node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
+package 'glibc.i686'
 
-include_recipe 'osl-docker'
+user 'acme-dns' do
+  system true
+end
 
-directory '/etc/acme-dns/config' do
+directory '/etc/acme-dns' do
   recursive true
   action :create
 end
 
-db_config = data_bag_item('osl_acme', 'database')
+remote_file '/etc/acme-dns/acme-dns.tar.gz' do
+  source "https://github.com/joohoi/acme-dns/releases/download/v#{node['osl-acme']['acme-dns']['version']}/acme-dns_#{node['osl-acme']['acme-dns']['version']}_linux_386.tar.gz"
+  checksum node['osl-acme']['acme-dns']['checksum']
+  mode '0755'
+  notifies :extract, 'archive_file[/etc/acme-dns/acme-dns.tar.gz]', :immediately
+end
 
-template '/etc/acme-dns/config/config.cfg' do
-  source 'config.cfg.erb'
-  variables(pg_host: db_config['host'],
-            pg_user: db_config['user'],
-            pg_pass: db_config['pass'],
-            pg_dbname: db_config['dbname'])
-  notifies :restart, 'docker_container[acme-dns.osuosl.org]'
+archive_file '/etc/acme-dns/acme-dns.tar.gz' do
+  destination '/etc/acme-dns'
+  overwrite true
+  notifies :create, 'link[/usr/local/bin/acme-dns]', :immediately
+end
+
+link '/usr/local/bin/acme-dns' do
+  to '/etc/acme-dns/acme-dns'
 end
 
 dns_address = if node['osl-acme']['acme-dns']['ns-address']
-                node['osl-acme']['acme-dns']['ns-address'] + ':'
+                node['osl-acme']['acme-dns']['ns-address']
               else
-                ''
+                '0.0.0.0'
               end
 
-docker_image 'joohoi/acme-dns' do
-  tag node['osl-acme']['acme-dns']['version']
-  action :pull
+db_config = data_bag_item('osl_acme', 'database')
+
+template '/etc/acme-dns/config.cfg' do
+  source 'config.cfg.erb'
+  variables(dns_interface: dns_address,
+            pg_host: db_config['host'],
+            pg_user: db_config['user'],
+            pg_pass: db_config['pass'],
+            pg_dbname: db_config['dbname'])
+  notifies :restart, 'systemd_unit[acme-dns.service]'
 end
 
-docker_container 'acme-dns.osuosl.org' do
-  repo 'joohoi/acme-dns'
-  tag node['osl-acme']['acme-dns']['version']
-  restart_policy 'always'
-  port ['80:80', '443:443', "#{dns_address}53:53/tcp", "#{dns_address}53:53/udp"]
-  volumes ['/etc/acme-dns/config:/etc/acme-dns:ro']
+systemd_unit 'acme-dns.service' do
+  content <<-EOF.gsub(/^\s+/, '')
+  [Unit]
+  Description=Limited DNS server with RESTful HTTP API to handle ACME DNS challenges easily and securely
+  After=network.target
+
+  [Service]
+  AmbientCapabilities=CAP_NET_BIND_SERVICE
+  WorkingDirectory=~
+  ExecStart=/usr/local/bin/acme-dns
+  Restart=on-failure
+
+  [Install]
+  WantedBy=multi-user.target
+  EOF
+  action [:create, :enable, :start]
 end

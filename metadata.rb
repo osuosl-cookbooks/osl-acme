@@ -10,7 +10,6 @@ version          '3.3.0'
 
 depends          'acme', '~> 4.1.2'
 depends          'base'
-depends          'osl-docker'
 depends          'osl-git'
 depends          'resolver', '~> 2.0'
 
