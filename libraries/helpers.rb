@@ -1,12 +1,12 @@
-require 'net/http'
-require 'openssl'
-# require 'acme-client'
-require 'uri'
-require 'json'
-
 module OslAcme
   module Cookbook
     module Helpers
+      require 'net/http'
+      require 'openssl'
+      # require 'acme-client'
+      require 'uri'
+      require 'json'
+
       def get_cert_or_nil(path)
         return OpenSSL::X509::Certificate.new(File.read(path)) if File.exist?(path)
       end
@@ -23,7 +23,6 @@ module OslAcme
       end
 
       def request_record(acme_dns_api)
-        require 'acme-client'
         # Update ACME DNS record
         uri = URI.parse("#{acme_dns_api}/request")
 
@@ -35,7 +34,6 @@ module OslAcme
       end
 
       def perform_challenge(authorization, subdomain, username, key, acme_dns_api)
-        require 'acme-client'
         puts "Performing challenge for #{authorization.identifier['value']}"
 
         challenge = authorization.dns

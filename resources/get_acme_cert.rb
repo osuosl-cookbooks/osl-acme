@@ -14,9 +14,6 @@ property :alt_names, Array, default: []
 property :contact, String, default: lazy { node['acme']['contact'] }
 property :acme_directory, String, default: lazy { node['acme']['dir'] }
 property :acme_dns_api, String, default: lazy { node['osl-acme']['acme-dns']['api'] }
-property :acme_dns_api_subdomain, String
-property :acme_dns_api_username, String
-property :acme_dns_api_key, String
 property :cert_path, String
 property :key_path, String
 
@@ -43,13 +40,18 @@ action :create do
   client = create_client(private_key, new_resource.acme_directory, new_resource.contact)
   order = client.new_order(identifiers: [new_resource.domain, *new_resource.alt_names])
 
+  credentials = data_bag_item('osl_acme', 'credentials')['credentials']
+
   # Perform challenges for all identifiers
   order.authorizations.each do |authorization|
+    domain = authorization.identifier['value']
+    domain_creds = credentials[domain]
+
     valid = perform_challenge(
       authorization,
-      new_resource.acme_dns_api_subdomain,
-      new_resource.acme_dns_api_username,
-      new_resource.acme_dns_api_key,
+      domain_creds['subdomain'],
+      domain_creds['username'],
+      domain_creds['key'],
       new_resource.acme_dns_api
     )
 
