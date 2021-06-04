@@ -38,6 +38,11 @@ module OslAcme
 
         challenge = authorization.dns
 
+        # Check if challenge is already valid
+        if challenge.status == 'valid'
+          return true
+        end
+
         # Update ACME DNS record
         uri = URI.parse("#{acme_dns_api}/update")
 

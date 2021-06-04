@@ -19,11 +19,15 @@ property :key_path, String
 
 action :create do
   existing_cert = get_cert_or_nil(new_resource.cert_path)
+  identifiers = [new_resource.domain, *new_resource.alt_names]
 
   # Check if an existing certificate exists that expires in more than 24 hours
   if existing_cert
     ttl = existing_cert.not_after - Time.now
-    return if ttl > 86400
+    san_ext = existing_cert.extensions.detect { |e| e.oid == 'subjectAltName' }
+    subject_alt_names = san_ext.value.split(', ').map { |e| e.sub('DNS:', '') }
+
+    return if ttl > 86400 && subject_alt_names == identifiers
   end
 
   private_key = get_key_or_nil(new_resource.key_path)
@@ -38,7 +42,7 @@ action :create do
   end
 
   client = create_client(private_key, new_resource.acme_directory, new_resource.contact)
-  order = client.new_order(identifiers: [new_resource.domain, *new_resource.alt_names])
+  order = client.new_order(identifiers: identifiers)
 
   credentials = data_bag_item('osl_acme', 'credentials')['credentials']
 
