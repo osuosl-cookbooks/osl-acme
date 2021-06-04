@@ -10,9 +10,9 @@ default_action :create
 
 property :domain, String, name_property: true
 property :alt_names, Array, default: []
-property :contact, String
-property :acme_directory, String
-property :acme_dns_api, String
+property :contact, String, default: lazy { node['acme']['contact'] }
+property :acme_directory, String, default: lazy { node['acme']['dir'] }
+property :acme_dns_api, String, default: lazy { node['osl-acme']['acme-dns']['api'] }
 property :acme_dns_api_subdomain, String
 property :acme_dns_api_username, String
 property :acme_dns_api_key, String
