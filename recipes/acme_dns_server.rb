@@ -60,18 +60,18 @@ end
 
 systemd_unit 'acme-dns.service' do
   content <<-EOF.gsub(/^\s+/, '')
-  [Unit]
-  Description=Limited DNS server with RESTful HTTP API to handle ACME DNS challenges easily and securely
-  After=network.target
+    [Unit]
+    Description=Limited DNS server with RESTful HTTP API to handle ACME DNS challenges easily and securely
+    After=network.target
 
-  [Service]
-  AmbientCapabilities=CAP_NET_BIND_SERVICE
-  WorkingDirectory=~
-  ExecStart=/usr/local/bin/acme-dns
-  Restart=on-failure
+    [Service]
+    AmbientCapabilities=CAP_NET_BIND_SERVICE
+    WorkingDirectory=~
+    ExecStart=/usr/local/bin/acme-dns
+    Restart=on-failure
 
-  [Install]
-  WantedBy=multi-user.target
+    [Install]
+    WantedBy=multi-user.target
   EOF
   action [:create, :enable, :start]
 end
