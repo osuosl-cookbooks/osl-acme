@@ -1,3 +1,7 @@
+describe port('192.168.10.1', 53) do
+  it { should be_listening }
+end
+
 describe file('/tmp/test1.example.org.pem') do
   it { should exist }
 end
@@ -6,11 +10,24 @@ describe file('/tmp/test2.example.org.pem') do
   it { should exist }
 end
 
-describe docker.containers do
-  its('names') { should include 'acme-dns.osuosl.org' }
-  its('images') { should include 'joohoi/acme-dns:latest' }
+describe x509_certificate('/tmp/test1.example.org.pem') do
+  its('validity_in_days') { should be > 30 }
+
+  its('subject.CN') { should eq 'test1.example.org' }
+  its('issuer.CN') { should include 'Pebble Intermediate CA' }
+
+  its('extensions') { should include 'subjectAltName' }
+  its('extensions.subjectAltName') { should include 'DNS:test1.example.org' }
 end
 
-describe port('192.168.10.1', 53) do
-  it { should be_listening }
+describe x509_certificate('/tmp/test2.example.org.pem') do
+  its('validity_in_days') { should be > 30 }
+
+  its('subject.CN') { should eq 'test2.example.org' }
+  its('issuer.CN') { should include 'Pebble Intermediate CA' }
+
+  its('extensions') { should include 'subjectAltName' }
+  its('extensions.subjectAltName') { should include 'DNS:test2.example.org' }
+  its('extensions.subjectAltName') { should include 'DNS:test2-san1.example.org' }
+  its('extensions.subjectAltName') { should include 'DNS:test2-san2.example.org' }
 end
