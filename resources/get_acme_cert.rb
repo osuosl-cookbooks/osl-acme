@@ -5,6 +5,7 @@ require 'json'
 
 resource_name :get_acme_cert
 provides :get_acme_cert
+unified_mode true
 
 default_action :create
 

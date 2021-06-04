@@ -44,11 +44,7 @@ link '/usr/local/bin/acme-dns' do
   to '/etc/acme-dns/acme-dns'
 end
 
-dns_address = if node['osl-acme']['acme-dns']['ns-address']
-                node['osl-acme']['acme-dns']['ns-address']
-              else
-                '0.0.0.0'
-              end
+dns_address = node['osl-acme']['acme-dns']['ns-address'] || '0.0.0.0'
 
 db_config = data_bag_item('osl_acme', 'database')
 
