@@ -35,7 +35,6 @@ node.default['resolver']['domain'] = 'example.org'
 node.default['resolver']['search'] = 'example.org'
 node.default['resolver']['nameservers'] = %w(127.0.0.1)
 
-include_recipe 'osl-acme::default'
 include_recipe 'resolver'
 include_recipe 'git'
 
@@ -69,7 +68,7 @@ bash 'update Chef trusted certificates store' do
 end
 
 systemd_unit 'pebble.service' do
-  content <<-EOF.gsub(/^\s+/, '')
+  content <<~EOF
     [Unit]
     Description=Pebble is a small RFC 8555 ACME test server
     After=network.target

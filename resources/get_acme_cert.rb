@@ -1,7 +1,4 @@
-require 'net/http'
 require 'openssl'
-require 'uri'
-require 'json'
 
 resource_name :get_acme_cert
 provides :get_acme_cert

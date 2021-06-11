@@ -56,7 +56,7 @@ end
 # Configure acme-dns
 #
 
-osl_fakenic 'lo' do
+osl_fakenic 'eth1' do
   ip4 node['osl-acme']['acme-dns']['ns-address']
 end
 

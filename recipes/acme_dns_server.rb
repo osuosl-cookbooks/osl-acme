@@ -16,26 +16,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package 'glibc.i686'
+acme_dns_version = node['osl-acme']['acme-dns']['version']
+dns_address = node['osl-acme']['acme-dns']['ns-address'] || '0.0.0.0'
 
-user 'acme-dns' do
-  system true
-end
+db_config = data_bag_item('osl_acme', 'database')
 
 directory '/etc/acme-dns' do
   recursive true
-  action :create
 end
 
-acme_dns_version = node['osl-acme']['acme-dns']['version']
-remote_file '/etc/acme-dns/acme-dns.tar.gz' do
-  source "https://github.com/joohoi/acme-dns/releases/download/v#{acme_dns_version}/acme-dns_#{acme_dns_version}_linux_386.tar.gz"
+remote_file "#{Chef::Config[:file_cache_path]}/acme-dns.tar.gz" do
+  source "https://github.com/joohoi/acme-dns/releases/download/v#{acme_dns_version}/acme-dns_#{acme_dns_version}_linux_amd64.tar.gz"
   checksum node['osl-acme']['acme-dns']['checksum']
   mode '0755'
-  notifies :extract, 'archive_file[/etc/acme-dns/acme-dns.tar.gz]', :immediately
+  notifies :extract, "archive_file[#{Chef::Config[:file_cache_path]}/acme-dns.tar.gz]", :immediately
 end
 
-archive_file '/etc/acme-dns/acme-dns.tar.gz' do
+archive_file "#{Chef::Config[:file_cache_path]}/acme-dns.tar.gz" do
   destination '/etc/acme-dns'
   overwrite true
   action :nothing
@@ -47,22 +44,20 @@ link '/usr/local/bin/acme-dns' do
   action :nothing
 end
 
-dns_address = node['osl-acme']['acme-dns']['ns-address'] || '0.0.0.0'
-
-db_config = data_bag_item('osl_acme', 'database')
-
 template '/etc/acme-dns/config.cfg' do
   source 'config.cfg.erb'
-  variables(dns_interface: dns_address,
-            pg_host: db_config['host'],
-            pg_user: db_config['user'],
-            pg_pass: db_config['pass'],
-            pg_dbname: db_config['dbname'])
+  variables(
+    dns_interface: dns_address,
+    pg_host: db_config['host'],
+    pg_user: db_config['user'],
+    pg_pass: db_config['pass'],
+    pg_dbname: db_config['dbname']
+  )
   notifies :restart, 'systemd_unit[acme-dns.service]'
 end
 
 systemd_unit 'acme-dns.service' do
-  content <<-EOF.gsub(/^\s+/, '')
+  content <<~EOF
     [Unit]
     Description=Limited DNS server with RESTful HTTP API to handle ACME DNS challenges easily and securely
     After=network.target
