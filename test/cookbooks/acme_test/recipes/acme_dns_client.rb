@@ -44,13 +44,7 @@ postgresql_user db_config['user'] do
   action :create
 end
 
-file '/var/lib/pgsql/12/data/pg_hba.conf' do
-  content <<-EOF
-local   all             all                                     trust
-host    all             all             0.0.0.0/0               trust
-  EOF
-  notifies :reload, 'service[postgresql]', :immediately
-end
+postgresql_access 'local'
 
 #
 # Configure acme-dns
@@ -96,15 +90,12 @@ end
 # Get certificates for the specified hosts
 #
 
-records = data_bag_item('osl_acme', 'records')['records']
-records.each do |record|
-  get_acme_cert record['domain'] do
-    contact 'mailto:andrewda@osuosl.org'
-    acme_directory node['acme']['dir']
-    acme_dns_api node['osl-acme']['acme-dns']['api']
-    cert_path "/tmp/#{record['domain']}.pem"
-    key_path "/tmp/#{record['domain']}.key"
+dns_acme_certs 'Get ACME certificates' do
+  records data_bag_item('osl_acme', 'records')['records']
 
-    alt_names record['alt_names']
-  end
+  contact 'mailto:andrewda@osuosl.org'
+  acme_directory node['acme']['dir']
+  acme_dns_api node['osl-acme']['acme-dns']['api']
+  cert_path '/etc/pki/tls'
+  key_path '/etc/pki/tls'
 end

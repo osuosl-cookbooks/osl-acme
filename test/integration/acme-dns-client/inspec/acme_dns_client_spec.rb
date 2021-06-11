@@ -2,15 +2,15 @@ describe port('192.168.10.1', 53) do
   it { should be_listening }
 end
 
-describe file('/tmp/test1.example.org.pem') do
+describe file('/etc/pki/tls/test1.example.org.pem') do
   it { should exist }
 end
 
-describe file('/tmp/test2.example.org.pem') do
+describe file('/etc/pki/tls/test2.example.org.pem') do
   it { should exist }
 end
 
-describe x509_certificate('/tmp/test1.example.org.pem') do
+describe x509_certificate('/etc/pki/tls/test1.example.org.pem') do
   its('validity_in_days') { should be > 30 }
 
   its('subject.CN') { should eq 'test1.example.org' }
@@ -20,7 +20,7 @@ describe x509_certificate('/tmp/test1.example.org.pem') do
   its('extensions.subjectAltName') { should include 'DNS:test1.example.org' }
 end
 
-describe x509_certificate('/tmp/test2.example.org.pem') do
+describe x509_certificate('/etc/pki/tls/test2.example.org.pem') do
   its('validity_in_days') { should be > 30 }
 
   its('subject.CN') { should eq 'test2.example.org' }
