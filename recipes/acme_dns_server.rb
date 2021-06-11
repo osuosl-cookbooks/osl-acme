@@ -27,8 +27,9 @@ directory '/etc/acme-dns' do
   action :create
 end
 
+acme_dns_version = node['osl-acme']['acme-dns']['version']
 remote_file '/etc/acme-dns/acme-dns.tar.gz' do
-  source "https://github.com/joohoi/acme-dns/releases/download/v#{node['osl-acme']['acme-dns']['version']}/acme-dns_#{node['osl-acme']['acme-dns']['version']}_linux_386.tar.gz"
+  source "https://github.com/joohoi/acme-dns/releases/download/v#{acme_dns_version}/acme-dns_#{acme_dns_version}_linux_386.tar.gz"
   checksum node['osl-acme']['acme-dns']['checksum']
   mode '0755'
   notifies :extract, 'archive_file[/etc/acme-dns/acme-dns.tar.gz]', :immediately
@@ -37,11 +38,13 @@ end
 archive_file '/etc/acme-dns/acme-dns.tar.gz' do
   destination '/etc/acme-dns'
   overwrite true
+  action :nothing
   notifies :create, 'link[/usr/local/bin/acme-dns]', :immediately
 end
 
 link '/usr/local/bin/acme-dns' do
   to '/etc/acme-dns/acme-dns'
+  action :nothing
 end
 
 dns_address = node['osl-acme']['acme-dns']['ns-address'] || '0.0.0.0'

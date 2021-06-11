@@ -26,9 +26,6 @@ suites:
           host_aliases:
             - foo.org
   - name: acme-dns-client
-    provisioner: # acme_test cookbook's execute[wait_for_acmedns] is not idempotent
-      enforce_idempotency: false
-      multiple_converge: 1
     run_list:
       - recipe[acme_test::acme_dns_client]
     attributes:

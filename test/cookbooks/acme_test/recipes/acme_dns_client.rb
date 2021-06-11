@@ -68,10 +68,10 @@ include_recipe 'osl-acme::default'
 credentials = data_bag_item('osl_acme', 'credentials')['credentials']
 subdomain_values = credentials.map { |_, creds| "('\"'\"'#{creds['subdomain']}'\"'\"')" }.join(',')
 record_values = credentials.map { |_, creds| "('\"'\"'#{creds['username']}'\"'\"', '\"'\"'#{creds['subdomain']}'\"'\"', '\"'\"'#{make_password(creds['key'])}'\"'\"', '\"'\"'[]'\"'\"')" }.join(',')
+test_subdomains = credentials.map { |_, creds| "subdomain = '#{creds['subdomain']}'" }.join(' OR ')
 
 execute 'Create acme-dns records' do
   command <<-EOF
-    sleep 15 &&
     psql -U #{db_config['user']} #{db_config['dbname']} -c '
       INSERT INTO records (username, subdomain, password, allowfrom)
       VALUES #{record_values}
@@ -80,6 +80,15 @@ execute 'Create acme-dns records' do
       INSERT INTO txt (subdomain)
       VALUES #{subdomain_values}
       ON CONFLICT DO NOTHING'
+  EOF
+
+  only_if <<-EOF
+    sleep 15 &&
+    psql -U #{db_config['user']} #{db_config['dbname']} -c "
+      SELECT COUNT(*) FROM records
+      WHERE #{test_subdomains}" |
+    tr -d '\n' |
+    grep -P 'count -------     0'
   EOF
 end
 

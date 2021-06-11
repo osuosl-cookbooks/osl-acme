@@ -32,8 +32,8 @@ for LetsEncrypt.
 
 #### osl-acme::acme_dns_server
 
-This configures an [acme-dns](https://github.com/joohoi/acme-dns) instance in a
-Docker container.
+This installs and starts [acme-dns](https://github.com/joohoi/acme-dns) which
+streamlines ACME's DNS challenge process.
 
 Contributing
 ------------
