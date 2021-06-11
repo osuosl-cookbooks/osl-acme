@@ -49,31 +49,28 @@ describe 'osl-acme::acme_dns_server' do
         expect { chef_run }.to_not raise_error
       end
       it do
-        expect(chef_run).to install_package('glibc.i686')
-      end
-      it do
         expect(chef_run).to create_directory('/etc/acme-dns').with(recursive: true)
       end
       it do
-        expect(chef_run).to create_remote_file('/etc/acme-dns/acme-dns.tar.gz')
+        expect(chef_run).to create_remote_file("#{Chef::Config[:file_cache_path]}/acme-dns.tar.gz")
           .with(
-            source: 'https://github.com/joohoi/acme-dns/releases/download/v0.8/acme-dns_0.8_linux_386.tar.gz',
-            checksum: '24860e6f24231c8884e621d089d4f327b608b262bb4958310d2aff9f4a08a703',
+            source: 'https://github.com/joohoi/acme-dns/releases/download/v0.8/acme-dns_0.8_linux_amd64.tar.gz',
+            checksum: 'f5c031a78ea867a40c3b7cdb1d370f423bdf923e79a9607e44dabdc4dbda6a05',
             mode: '0755'
           )
       end
       it do
-        expect(chef_run.remote_file('/etc/acme-dns/acme-dns.tar.gz')).to notify('archive_file[/etc/acme-dns/acme-dns.tar.gz]').to(:extract).immediately
+        expect(chef_run.remote_file("#{Chef::Config[:file_cache_path]}/acme-dns.tar.gz")).to notify("archive_file[#{Chef::Config[:file_cache_path]}/acme-dns.tar.gz]").to(:extract).immediately
       end
       it do
-        expect(chef_run).to nothing_archive_file('/etc/acme-dns/acme-dns.tar.gz')
+        expect(chef_run).to nothing_archive_file("#{Chef::Config[:file_cache_path]}/acme-dns.tar.gz")
           .with(
             destination: '/etc/acme-dns',
             overwrite: true
           )
       end
       it do
-        expect(chef_run.archive_file('/etc/acme-dns/acme-dns.tar.gz')).to notify('link[/usr/local/bin/acme-dns]').to(:create).immediately
+        expect(chef_run.archive_file("#{Chef::Config[:file_cache_path]}/acme-dns.tar.gz")).to notify('link[/usr/local/bin/acme-dns]').to(:create).immediately
       end
       it do
         expect(chef_run).to nothing_link('/usr/local/bin/acme-dns').with(to: '/etc/acme-dns/acme-dns')
