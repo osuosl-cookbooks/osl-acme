@@ -53,6 +53,8 @@ template '/etc/acme-dns/config.cfg' do
     pg_pass: db_config['pass'],
     pg_dbname: db_config['dbname']
   )
+  sensitive true
+  mode '0600'
   notifies :restart, 'systemd_unit[acme-dns.service]'
 end
 

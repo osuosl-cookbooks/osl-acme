@@ -1,9 +1,0 @@
-solver :ruby, :required
-
-source 'https://supermarket.chef.io'
-
-solver :ruby, :required
-
-cookbook 'osl-postgresql', git: 'git@github.com:osuosl-cookbooks/osl-postgresql'
-
-metadata

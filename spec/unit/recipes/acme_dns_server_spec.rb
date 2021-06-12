@@ -85,7 +85,9 @@ describe 'osl-acme::acme_dns_server' do
               pg_user: 'testuser',
               pg_pass: 'testpass',
               pg_dbname: 'testdb',
-            }
+            },
+            sensitive: true,
+            mode: '0600'
           )
       end
       it do
