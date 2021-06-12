@@ -68,12 +68,10 @@ execute 'Create acme-dns records' do
   command <<-EOF
     psql -U #{db_config['user']} #{db_config['dbname']} -c '
       INSERT INTO records (username, subdomain, password, allowfrom)
-      VALUES #{record_values}
-      ON CONFLICT DO NOTHING' &&
+      VALUES #{record_values}' &&
     psql -U #{db_config['user']} #{db_config['dbname']} -c '
       INSERT INTO txt (subdomain)
-      VALUES #{subdomain_values}
-      ON CONFLICT DO NOTHING'
+      VALUES #{subdomain_values}'
   EOF
 
   only_if <<-EOF
