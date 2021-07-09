@@ -66,7 +66,6 @@ systemd_unit 'acme-dns.service' do
 
     [Service]
     AmbientCapabilities=CAP_NET_BIND_SERVICE
-    WorkingDirectory=~
     ExecStart=/usr/local/bin/acme-dns
     Restart=on-failure
 
