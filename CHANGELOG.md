@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+3.3.1 (2021-06-14)
+------------------
+- Enable Selinux Enforcing
+
 3.3.0 (2021-04-06)
 ------------------
 - update chef dependency to >= 16
