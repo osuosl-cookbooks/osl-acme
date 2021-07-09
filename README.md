@@ -30,6 +30,11 @@ for LetsEncrypt.
   NOTE: This recipe should NEVER be used in production. It is only used for
   testing.
 
+#### osl-acme::acme_dns_server
+
+This installs and starts [acme-dns](https://github.com/joohoi/acme-dns) which
+streamlines ACME's DNS challenge process.
+
 Contributing
 ------------
 

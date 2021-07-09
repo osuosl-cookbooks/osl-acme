@@ -42,8 +42,8 @@ describe 'osl-acme::server' do
       it do
         expect(chef_run).to create_remote_file('/usr/local/bin/pebble')
           .with(
-            source: 'http://packages.osuosl.org/distfiles/pebble-v1.0.1',
-            checksum: '902e061d9c563d8cbf9a56b2c299898f99a0da4ec3a8d8d7ef5d5e68de9cdb39',
+            source: 'https://github.com/letsencrypt/pebble/releases/download/v2.3.1/pebble_linux-amd64',
+            checksum: '60a401159d5132411c88e93ff03ba3322d4ecc7fdba78503da552018f3f98230',
             mode: '0755'
           )
       end
@@ -59,7 +59,7 @@ describe 'osl-acme::server' do
             user: 'pebble',
             repository: 'https://github.com/letsencrypt/pebble.git',
             depth: 1,
-            revision: 'v1.0.1'
+            revision: 'v2.3.1'
           )
       end
       it do
@@ -94,7 +94,7 @@ describe 'osl-acme::server' do
       it do
         expect(chef_run).to create_systemd_unit('pebble.service')
           .with(
-            content: "[Unit]\nDescription=Pebble is a small RFC 8555 ACME test server\nAfter=network.target\n[Service]\nWorkingDirectory=/opt/pebble\nUser=pebble\nEnvironment=PEBBLE_VA_ALWAYS_VALID=1\nEnvironment=PEBBLE_VA_NOSLEEP=1\nEnvironment=PEBBLE_WFE_NONCEREJECT=0\nExecStart=/usr/local/bin/pebble -config /opt/pebble/test/config/pebble-config.json\n[Install]\nWantedBy=multi-user.target\n"
+            content: "[Unit]\nDescription=Pebble is a small RFC 8555 ACME test server\nAfter=network.target\n\n[Service]\nWorkingDirectory=/opt/pebble\nUser=pebble\nEnvironment=PEBBLE_VA_ALWAYS_VALID=1\nEnvironment=PEBBLE_VA_NOSLEEP=1\nEnvironment=PEBBLE_WFE_NONCEREJECT=0\nExecStart=/usr/local/bin/pebble -config /opt/pebble/test/config/pebble-config.json\n\n[Install]\nWantedBy=multi-user.target\n"
           )
       end
       it do

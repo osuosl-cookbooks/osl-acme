@@ -14,6 +14,9 @@ bin/*
 # test kitchen
 .kitchen/
 .kitchen.local.yml
+test/chef-config/*.pem
+test/chef-config/local-mode-cache/
+cookbooks/*
 
 # Chef
 Berksfile.lock
