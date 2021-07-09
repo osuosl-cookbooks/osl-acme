@@ -1,14 +1,6 @@
 node.default['osl-acme']['pebble']['always_valid'] = false
 node.default['osl-acme']['pebble']['command'] = '/usr/local/bin/pebble -config /opt/pebble/test/config/pebble-config.json -dnsserver :8053'
 
-build_essential 'osl-acme-test' do
-  compile_time true
-end
-
-chef_gem 'bcrypt' do
-  compile_time true
-end
-
 #
 # Configure Bind
 #
@@ -46,6 +38,13 @@ end
 
 postgresql_access 'local'
 
+cookbook_file '/root/acmedns.sql'
+
+execute 'import acmedns sql dump' do
+  command "psql -h localhost -U #{db_config['user']} #{db_config['dbname']} < /root/acmedns.sql; touch /root/.db-imported"
+  creates '/root/.db-imported'
+end
+
 #
 # Configure acme-dns
 #
@@ -57,32 +56,6 @@ end
 include_recipe 'osl-acme::server'
 include_recipe 'osl-acme::acme_dns_server'
 include_recipe 'osl-acme::default'
-
-# Create test records
-credentials = data_bag_item('osl_acme', 'credentials')['credentials']
-subdomain_values = credentials.map { |_, creds| "('\"'\"'#{creds['subdomain']}'\"'\"')" }.join(',')
-record_values = credentials.map { |_, creds| "('\"'\"'#{creds['username']}'\"'\"', '\"'\"'#{creds['subdomain']}'\"'\"', '\"'\"'#{make_password(creds['key'])}'\"'\"', '\"'\"'[]'\"'\"')" }.join(',')
-test_subdomains = credentials.map { |_, creds| "subdomain = '#{creds['subdomain']}'" }.join(' OR ')
-
-execute 'Create acme-dns records' do
-  command <<-EOF
-    psql -U #{db_config['user']} #{db_config['dbname']} -c '
-      INSERT INTO records (username, subdomain, password, allowfrom)
-      VALUES #{record_values}' &&
-    psql -U #{db_config['user']} #{db_config['dbname']} -c '
-      INSERT INTO txt (subdomain)
-      VALUES #{subdomain_values}'
-  EOF
-
-  only_if <<-EOF
-    sleep 15 &&
-    psql -U #{db_config['user']} #{db_config['dbname']} -c "
-      SELECT COUNT(*) FROM records
-      WHERE #{test_subdomains}" |
-    tr -d '\n' |
-    grep -P 'count -------     0'
-  EOF
-end
 
 #
 # Get certificates for the specified hosts

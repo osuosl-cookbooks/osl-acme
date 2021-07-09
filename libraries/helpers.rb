@@ -46,14 +46,12 @@ module OslAcme
         # Update ACME DNS record
         uri = URI.parse("#{acme_dns_api}/update")
 
-        header = { 'Content-Type': 'text/json' }
+        header = { 'Content-Type': 'text/json', 'X-Api-User': username, 'X-Api-Key': key }
         body = { subdomain: subdomain, txt: challenge.record_content }
 
         http = Net::HTTP.new(uri.host, uri.port)
         request = Net::HTTP::Post.new(uri.request_uri, header)
         request.body = body.to_json
-        request['X-Api-User'] = username
-        request['X-Api-Key'] = key
 
         response = http.request(request)
         puts response.code
