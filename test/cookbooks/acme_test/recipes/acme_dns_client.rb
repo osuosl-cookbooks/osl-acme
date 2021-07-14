@@ -2,6 +2,11 @@ node.default['osl-acme']['pebble']['always_valid'] = false
 node.default['osl-acme']['pebble']['command'] = '/usr/local/bin/pebble -config /opt/pebble/test/config/pebble-config.json -dnsserver :8053'
 node.default['osl-postgresql']['version'] = '12'
 
+include_recipe 'selinux_policy::install'
+
+# build_essential 'acme-dns-test'
+# package 'policycoreutils-python-utils'
+
 #
 # Configure Bind
 #
@@ -39,12 +44,17 @@ end
 
 postgresql_access 'local'
 
+osl_firewall_port 'postgres'
+
 cookbook_file '/root/acmedns.sql'
 
 execute 'import acmedns sql dump' do
   command "psql -h localhost -U #{db_config['user']} #{db_config['dbname']} < /root/acmedns.sql; touch /root/.db-imported"
   creates '/root/.db-imported'
 end
+
+selinux_policy_permissive 'init_t'
+selinux_policy_permissive 'named_t'
 
 #
 # Configure acme-dns

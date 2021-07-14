@@ -58,6 +58,17 @@ template '/etc/acme-dns/config.cfg' do
   notifies :restart, 'systemd_unit[acme-dns.service]'
 end
 
+osl_firewall_dns 'dns'
+
+osl_firewall_port 'http' do
+  osl_only true
+end
+
+execute 'Restrict /register to localhost' do
+  command '/usr/sbin/iptables -I INPUT -p tcp --dport 80 -m string --string "POST /register" --algo kmp -j DROP'
+  not_if 'iptables --list | grep "POST /register"'
+end
+
 systemd_unit 'acme-dns.service' do
   content <<~EOF
     [Unit]
