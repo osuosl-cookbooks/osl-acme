@@ -4,9 +4,6 @@ node.default['osl-postgresql']['version'] = '12'
 
 include_recipe 'selinux_policy::install'
 
-# build_essential 'acme-dns-test'
-# package 'policycoreutils-python-utils'
-
 #
 # Configure Bind
 #
