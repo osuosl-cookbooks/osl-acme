@@ -43,6 +43,8 @@ describe 'osl-acme::acme_dns_server' do
           }
         )
         stub_data_bag_item('osl_acme', 'database').and_return(id: 'database', host: '127.0.0.1', user: 'testuser', pass: 'testpass', dbname: 'testdb')
+
+        stub_command('iptables --list | grep "POST /register"').and_return(false)
       end
 
       it 'converges successfully' do
