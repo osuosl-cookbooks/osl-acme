@@ -64,9 +64,13 @@ osl_firewall_port 'http' do
   osl_only true
 end
 
-execute 'Restrict /register to localhost' do
-  command '/usr/sbin/iptables -I INPUT -p tcp --dport 80 -m string --string "POST /register" --algo kmp -j DROP && touch /root/.iptables'
-  creates '/root/.iptables'
+iptables_rule 'Restrict POST /register to localhost' do
+  chain :INPUT
+  line_number 1
+  protocol :tcp
+  match 'string'
+  extra_options '--dport 80 --string "POST /register" --algo kmp'
+  jump 'DROP'
 end
 
 systemd_unit 'acme-dns.service' do

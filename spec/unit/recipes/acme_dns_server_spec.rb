@@ -96,6 +96,17 @@ describe 'osl-acme::acme_dns_server' do
         expect(chef_run.template('/etc/acme-dns/config.cfg')).to notify('systemd_unit[acme-dns.service]').to(:restart)
       end
       it do
+        expect(chef_run).to create_iptables_rule('Restrict POST /register to localhost')
+          .with(
+            chain: :INPUT,
+            line_number: 1,
+            protocol: :tcp,
+            match: 'string',
+            extra_options: '--dport 80 --string "POST /register" --algo kmp',
+            jump: 'DROP'
+          )
+      end
+      it do
         expect(chef_run).to create_systemd_unit('acme-dns.service')
       end
       it do
