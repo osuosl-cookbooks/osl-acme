@@ -61,7 +61,7 @@ module OslAcme
         end
 
         puts challenge
-        
+
         # Check challenge status
         if challenge.status == 'valid'
           puts "Challenge passed for #{authorization.identifier['value']}!"
