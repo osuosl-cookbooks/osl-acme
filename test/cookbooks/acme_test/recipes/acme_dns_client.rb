@@ -75,6 +75,4 @@ dns_acme_certs 'Get ACME certificates' do
   contact 'mailto:andrewda@osuosl.org'
   acme_directory node['acme']['dir']
   acme_dns_api node['osl-acme']['acme-dns']['api']
-  cert_path '/etc/pki/tls'
-  key_path '/etc/pki/tls'
 end
