@@ -47,7 +47,7 @@ module OslAcme
         request = Net::HTTP::Post.new(uri.request_uri, header)
         request.body = body.to_json
 
-        response = http.request(request)
+        http.request(request)
 
         # TXT record is updated, request ACME validation
         challenge.request_validation
