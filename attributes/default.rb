@@ -6,9 +6,7 @@ default['osl-acme']['pebble']['command'] = '/usr/local/bin/pebble -config /opt/p
 
 default['osl-acme']['acme-dns']['version'] = '0.8'
 default['osl-acme']['acme-dns']['checksum'] = 'f5c031a78ea867a40c3b7cdb1d370f423bdf923e79a9607e44dabdc4dbda6a05'
-default['osl-acme']['acme-dns']['api'] = 'http://192.168.10.1'
-default['osl-acme']['acme-dns']['domain'] = 'acme-dns.example.org'
-default['osl-acme']['acme-dns']['nsname'] = 'ns.acme-dns.example.org'
-default['osl-acme']['acme-dns']['nsadmin'] = 'test.example.org'
-
-default['acme']['dir'] = 'https://acme-staging-v02.api.letsencrypt.org/directory'
+default['osl-acme']['acme-dns']['api'] = 'http://ns.acme-dns.osuosl.org'
+default['osl-acme']['acme-dns']['domain'] = 'acme-dns.osuosl.org'
+default['osl-acme']['acme-dns']['nsname'] = 'ns.acme-dns.osuosl.org'
+default['osl-acme']['acme-dns']['nsadmin'] = 'webmaster.osuosl.org'
