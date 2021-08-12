@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_recipe 'ark'
+
 acme_dns_version = node['osl-acme']['acme-dns']['version']
 dns_address = node['osl-acme']['acme-dns']['ns-address'] || '0.0.0.0'
 
@@ -25,23 +27,13 @@ directory '/etc/acme-dns' do
   recursive true
 end
 
-remote_file "#{Chef::Config[:file_cache_path]}/acme-dns.tar.gz" do
-  source "https://github.com/joohoi/acme-dns/releases/download/v#{acme_dns_version}/acme-dns_#{acme_dns_version}_linux_amd64.tar.gz"
+ark 'acme-dns' do
+  url "https://github.com/joohoi/acme-dns/releases/download/v#{acme_dns_version}/acme-dns_#{acme_dns_version}_linux_amd64.tar.gz"
+  version acme_dns_version
   checksum node['osl-acme']['acme-dns']['checksum']
   mode '0755'
-  notifies :extract, "archive_file[#{Chef::Config[:file_cache_path]}/acme-dns.tar.gz]", :immediately
-end
-
-archive_file "#{Chef::Config[:file_cache_path]}/acme-dns.tar.gz" do
-  destination '/etc/acme-dns'
-  overwrite true
-  action :nothing
-  notifies :create, 'link[/usr/local/bin/acme-dns]', :immediately
-end
-
-link '/usr/local/bin/acme-dns' do
-  to '/etc/acme-dns/acme-dns'
-  action :nothing
+  has_binaries %w(acme-dns)
+  strip_components 0
 end
 
 template '/etc/acme-dns/config.cfg' do

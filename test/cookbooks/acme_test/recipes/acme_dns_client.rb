@@ -71,8 +71,6 @@ include_recipe 'osl-acme::default'
 
 dns_acme_certs 'Get ACME certificates' do
   records data_bag_item('osl_acme', 'records')['records']
-
-  contact 'mailto:andrewda@osuosl.org'
   acme_directory node['acme']['dir']
   acme_dns_api node['osl-acme']['acme-dns']['api']
 end
