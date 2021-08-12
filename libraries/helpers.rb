@@ -27,9 +27,10 @@ module OslAcme
       # Performs the ACME challenge. Returns true if the challenge is completed successfully and
       # false if an issue occurred.
       def perform_challenge(authorization, subdomain, username, key, acme_dns_api)
-        puts "Performing challenge for #{authorization.identifier['value']}"
-
+        domain = authorization.identifier['value']
         challenge = authorization.dns
+
+        Chef::Log.info("Performing challenge for #{domain}")
 
         # Check if challenge is already valid
         if challenge.status == 'valid'
@@ -47,8 +48,6 @@ module OslAcme
         request.body = body.to_json
 
         response = http.request(request)
-        puts response.code
-        puts response.body
 
         # TXT record is updated, request ACME validation
         challenge.request_validation
@@ -57,17 +56,14 @@ module OslAcme
         while challenge.status == 'pending'
           sleep(2)
           challenge.reload
-          puts "Status: #{challenge.status}"
         end
-
-        puts challenge
 
         # Check challenge status
         if challenge.status == 'valid'
-          puts "Challenge passed for #{authorization.identifier['value']}!"
+          Chef::Log.info("Challenge passed for #{domain}!")
           true
         else
-          puts "Challenge failed for #{authorization.identifier['value']}, status: #{challenge.status}"
+          Chef::Log.info("Challenge failed for #{domain}, status: #{challenge.status}")
           false
         end
       end
