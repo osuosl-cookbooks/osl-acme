@@ -65,11 +65,8 @@ iptables_rule 'Restrict POST /register to localhost' do
   jump 'DROP'
 end
 
-unit_requires = if node['acme']['dir'] == 'https://127.0.0.1:14000/dir'
-                  'Requires=pebble.service'
-                else
-                  ''
-                end
+# When Pebble is used during testing, ensures it starts before acme-dns
+unit_requires = 'Requires=pebble.service' if node['acme']['dir'] == 'https://127.0.0.1:14000/dir'
 
 systemd_unit 'acme-dns.service' do
   content <<~EOF
