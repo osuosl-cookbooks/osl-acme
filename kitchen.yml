@@ -32,8 +32,6 @@ suites:
     run_list:
       - recipe[acme_test::acme_dns_client]
     attributes:
-      acme:
-        dir: https://acme-staging-v02.api.letsencrypt.org/directory
       osl-acme:
         acme-dns:
           ns-address: 192.168.10.1

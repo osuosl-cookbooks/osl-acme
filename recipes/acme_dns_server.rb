@@ -65,11 +65,18 @@ iptables_rule 'Restrict POST /register to localhost' do
   jump 'DROP'
 end
 
+unit_requires = if node['acme']['dir'] == 'https://127.0.0.1:14000/dir'
+                  'Requires=pebble.service'
+                else
+                  ''
+                end
+
 systemd_unit 'acme-dns.service' do
   content <<~EOF
     [Unit]
     Description=Limited DNS server with RESTful HTTP API to handle ACME DNS challenges easily and securely
     After=network.target
+    #{unit_requires}
 
     [Service]
     AmbientCapabilities=CAP_NET_BIND_SERVICE
