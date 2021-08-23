@@ -6,7 +6,7 @@ chef_version     '>= 16.0'
 issues_url       'https://github.com/osuosl-cookbooks/osl-acme/issues'
 source_url       'https://github.com/osuosl-cookbooks/osl-acme'
 description      'Installs/Configures osl-acme'
-version          '3.3.1'
+version          '4.0.0'
 
 depends          'acme', '~> 4.1.2'
 depends          'base'

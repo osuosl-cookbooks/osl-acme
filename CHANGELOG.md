@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+4.0.0 (2021-08-23)
+------------------
+- Add acme_dns_server recipe
+
 3.3.1 (2021-06-14)
 ------------------
 - Enable Selinux Enforcing
