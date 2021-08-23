@@ -7,6 +7,8 @@ provisioner:
   enforce_idempotency: true
   multiple_converge: 2
   deprecations_as_errors: true
+  data_bags_path: test/integration/data_bags
+  encrypted_data_bag_secret_key_path: test/integration/encrypted_data_bag_secret
   attributes:
     osl-selinux:
       enforcing: true
@@ -26,3 +28,14 @@ suites:
         pebble:
           host_aliases:
             - foo.org
+  - name: acme-dns-client
+    run_list:
+      - recipe[acme_test::acme_dns_client]
+    attributes:
+      osl-acme:
+        acme-dns:
+          ns-address: 192.168.10.1
+          api: http://192.168.10.1
+          domain: acme-dns.example.org
+          nsname: ns.acme-dns.example.org
+          nsadmin: test.example.org

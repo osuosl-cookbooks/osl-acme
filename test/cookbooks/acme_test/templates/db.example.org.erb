@@ -1,0 +1,32 @@
+$ORIGIN .
+$TTL 300	; 5 minutes
+example.org		IN SOA	ns1.auth.example.org. hostmaster.example.org. (
+					2016072701	; serial number
+					3600		; refresh period
+					600			; retry period
+					604800		; expire time
+					1800		; minimum ttl
+				)
+				NS	ns1.auth.example.org.
+
+$ORIGIN auth.example.org.
+ns1			A	127.0.0.1
+ns-acme		A	192.168.10.1
+
+$ORIGIN acme-dns.example.org.
+ns			A	192.168.10.1
+
+$ORIGIN example.org.
+acme-dns	NS	ns.acme-dns.example.org.
+
+$ORIGIN test1.example.org.
+_acme-challenge		CNAME c8d6aeae-3f21-4786-b243-98bbd7c526a5.acme-dns.example.org.
+
+$ORIGIN test2.example.org.
+_acme-challenge		CNAME 2acca63e-1c34-4860-95f3-ba208dd8b0bc.acme-dns.example.org.
+
+$ORIGIN test2-san1.example.org.
+_acme-challenge		CNAME 773aacab-9539-4d59-b5e6-76718261e078.acme-dns.example.org.
+
+$ORIGIN test2-san2.example.org.
+_acme-challenge		CNAME d70eafbf-fa48-41fd-9496-bb6fa973c535.acme-dns.example.org.

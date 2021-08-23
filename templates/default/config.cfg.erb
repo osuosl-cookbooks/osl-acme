@@ -1,0 +1,36 @@
+##
+## Options to acme-dns
+## Managed by Chef! Changes will be overwritten!
+##
+
+[general]
+listen = "<%= @dns_interface %>:53"
+protocol = "both"
+domain = "<%= node['osl-acme']['acme-dns']['domain'] %>"
+nsname = "<%= node['osl-acme']['acme-dns']['nsname'] %>"
+nsadmin = "<%= node['osl-acme']['acme-dns']['nsadmin'] %>"
+records = [
+    "<%= node['osl-acme']['acme-dns']['domain'] %>. A <%= node['osl-acme']['acme-dns']['ns-address'] || node['ipaddress'] %>",
+    "<%= node['osl-acme']['acme-dns']['nsname'] %>. A <%= node['osl-acme']['acme-dns']['ns-address'] || node['ipaddress'] %>",
+    "<%= node['osl-acme']['acme-dns']['domain'] %>. NS <%= node['osl-acme']['acme-dns']['nsname'] %>."
+]
+debug = true
+
+[database]
+engine = "postgres"
+connection = "postgres://<%= @pg_user %>:<%= @pg_pass %>@<%= @pg_host %>/<%= @pg_dbname %>?sslmode=disable"
+
+[api]
+ip = "0.0.0.0"
+disable_registration = false
+port = "80"
+tls = "none"
+corsorigins = [
+    "*"
+]
+use_header = false
+
+[logconfig]
+loglevel = "debug"
+logtype = "stdout"
+logformat = "text"
