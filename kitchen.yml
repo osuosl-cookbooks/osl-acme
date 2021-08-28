@@ -34,8 +34,9 @@ suites:
     attributes:
       osl-acme:
         acme-dns:
+          port: 8000
           ns-address: 192.168.10.1
-          api: http://192.168.10.1
+          api: http://192.168.10.1:8000
           domain: acme-dns.example.org
           nsname: ns.acme-dns.example.org
           nsadmin: test.example.org
