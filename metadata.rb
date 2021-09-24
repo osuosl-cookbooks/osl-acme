@@ -9,7 +9,7 @@ description      'Installs/Configures osl-acme'
 version          '4.1.0'
 
 depends          'acme', '~> 4.1.4'
-depends          'base'
+depends          'osl-firewall'
 depends          'osl-git'
 depends          'osl-selinux'
 depends          'resolver', '~> 4.0.2'
