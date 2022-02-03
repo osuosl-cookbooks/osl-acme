@@ -33,11 +33,12 @@ service 'dnsmasq' do
   action [:start, :enable]
 end
 
-node.default['resolver']['domain'] = 'example.org'
-node.default['resolver']['search'] = 'example.org'
-node.default['resolver']['nameservers'] = %w(127.0.0.1)
+resolver_config '/etc/resolver.conf' do
+  domain 'example.org'
+  search 'example.org'
+  nameservers %w(127.0.0.1)
+end
 
-include_recipe 'resolver'
 include_recipe 'git'
 
 remote_file '/usr/local/bin/pebble' do
