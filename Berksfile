@@ -3,7 +3,7 @@ source 'https://supermarket.chef.io'
 solver :ruby, :required
 
 cookbook 'acme_test', path: 'test/cookbooks/acme_test'
-cookbook 'base', git: 'git@github.com:osuosl-cookbooks/base'
+cookbook 'base', git: 'git@github.com:osuosl-cookbooks/base', branch: 'EMH/chef-17'
 cookbook 'firewall', git: 'git@github.com:osuosl-cookbooks/firewall.git'
 cookbook 'osl-apache', git: 'git@github.com:osuosl-cookbooks/osl-apache'
 cookbook 'osl-firewall', git: 'git@github.com:osuosl-cookbooks/osl-firewall'
