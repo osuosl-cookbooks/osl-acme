@@ -2,7 +2,7 @@
 # Cookbook:: osl-acme
 # Recipe:: server
 #
-# Copyright:: 2017-2021, Oregon State University
+# Copyright:: 2017-2022, Oregon State University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,11 +33,12 @@ service 'dnsmasq' do
   action [:start, :enable]
 end
 
-node.default['resolver']['domain'] = 'example.org'
-node.default['resolver']['search'] = 'example.org'
-node.default['resolver']['nameservers'] = %w(127.0.0.1)
+resolver_config '/etc/resolver.conf' do
+  domain 'example.org'
+  search 'example.org'
+  nameservers %w(127.0.0.1)
+end
 
-include_recipe 'resolver'
 include_recipe 'git'
 
 remote_file '/usr/local/bin/pebble' do

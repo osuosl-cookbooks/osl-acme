@@ -6,7 +6,7 @@ description      'Installs/Configures acme_test'
 version          '0.1.0'
 
 depends          'bind'
-depends          'hostsfile'
 depends          'osl-acme'
 depends          'osl-apache'
 depends          'osl-postgresql'
+depends          'selinux'
