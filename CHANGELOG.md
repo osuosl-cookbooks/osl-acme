@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+4.1.0 (2022-02-17)
+------------------
+- Update cookbooks to Chef 17
+
 4.0.0 (2021-08-23)
 ------------------
 - Add acme_dns_server recipe
