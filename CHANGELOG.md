@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+4.2.0 (2022-08-23)
+------------------
+- Replace base with osl-resources
+
 4.1.0 (2022-02-17)
 ------------------
 - Update cookbooks to Chef 17
