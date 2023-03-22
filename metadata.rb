@@ -14,5 +14,6 @@ depends          'osl-git'
 depends          'osl-selinux'
 depends          'resolver', '~> 4.0.2'
 
+supports         'almalinux', '~> 8.0'
 supports         'centos', '~> 7.0'
 supports         'centos_stream', '~> 8.0'
