@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+4.2.1 (2023-03-22)
+------------------
+- Add AlmaLinux 8 support
+
 4.2.0 (2022-08-23)
 ------------------
 - Replace base with osl-resources
