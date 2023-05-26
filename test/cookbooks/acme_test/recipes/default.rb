@@ -7,7 +7,7 @@ include_recipe 'osl-apache::mod_ssl'
 acme_selfsigned 'foo.org' do
   crt '/etc/pki/tls/foo.org.crt'
   key '/etc/pki/tls/foo.org.key'
-  notifies :reload, 'service[apache2]', :immediately
+  notifies :reload, 'apache2_service[osuosl]', :immediately
 end
 
 apache_app 'foo.org' do
@@ -21,5 +21,5 @@ acme_certificate 'foo.org' do
   crt '/etc/pki/tls/foo.org.crt'
   key '/etc/pki/tls/foo.org.key'
   wwwroot '/var/www/foo.org/htdocs'
-  notifies :reload, 'service[apache2]'
+  notifies :reload, 'apache2_service[osuosl]'
 end
