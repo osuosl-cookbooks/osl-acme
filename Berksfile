@@ -13,6 +13,6 @@ cookbook 'osl-repos', git: 'git@github.com:osuosl-cookbooks/osl-repos'
 cookbook 'osl-resources', git: 'git@github.com:osuosl-cookbooks/osl-resources', branch: 'main'
 cookbook 'osl-rsync', git: 'git@github.com:osuosl-cookbooks/osl-rsync'
 cookbook 'osl-selinux', git: 'git@github.com:osuosl-cookbooks/osl-selinux'
-cookbook 'osl-postgresql', git: 'git@github.com:osuosl-cookbooks/osl-postgresql'
+cookbook 'osl-postgresql', git: 'git@github.com:osuosl-cookbooks/osl-postgresql', branch: 'fernbauj/update'
 
 metadata
