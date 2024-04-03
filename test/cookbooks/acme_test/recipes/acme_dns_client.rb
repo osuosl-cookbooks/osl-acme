@@ -33,13 +33,19 @@ db_config = data_bag_item('osl_acme', 'database')
 
 postgresql_database db_config['dbname']
 
-postgresql_user db_config['user'] do
-  database db_config['dbname']
-  password db_config['pass']
+postgresql_role db_config['user'] do
+  unencrypted_password db_config['pass']
+  login true
   action :create
 end
 
-postgresql_access 'local'
+# postgresql_access 'local'
+postgresql_access 'local_postgres_user' do
+  type 'local'
+  database 'all'
+  user db_config['user']
+  auth_method 'md5'
+end
 
 osl_firewall_port 'postgres'
 
