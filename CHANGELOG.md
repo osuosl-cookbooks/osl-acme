@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+4.2.2 (2024-04-03)
+------------------
+- Update test recipe utilizing postgresql
+
 4.2.1 (2023-03-22)
 ------------------
 - Add AlmaLinux 8 support
