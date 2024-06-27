@@ -14,4 +14,5 @@ depends          'osl-git'
 depends          'osl-selinux'
 depends          'resolver', '~> 4.0.2'
 
+supports         'almalinux', '~> 9.0'
 supports         'almalinux', '~> 8.0'
