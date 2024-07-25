@@ -61,7 +61,7 @@ iptables_rule 'Restrict POST /register to localhost' do
   line_number 1
   protocol :tcp
   match 'string'
-  extra_options '--dport 80 --string "POST /register" --algo kmp'
+  extra_options "--dport #{node['osl-acme']['acme-dns']['port']} --string \"POST /register\" --algo kmp"
   jump 'DROP'
 end
 

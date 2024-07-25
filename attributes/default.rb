@@ -10,3 +10,4 @@ default['osl-acme']['acme-dns']['api'] = 'http://ns.acme-dns.osuosl.org'
 default['osl-acme']['acme-dns']['domain'] = 'acme-dns.osuosl.org'
 default['osl-acme']['acme-dns']['nsname'] = 'ns.acme-dns.osuosl.org'
 default['osl-acme']['acme-dns']['nsadmin'] = 'webmaster.osuosl.org'
+default['osl-acme']['acme-dns']['port'] = 80
