@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+4.3.1 (2024-08-26)
+------------------
+- Add support for AlmaLinux 9
+
 4.3.0 (2024-06-26)
 ------------------
 - Remove support for CentOS 7
