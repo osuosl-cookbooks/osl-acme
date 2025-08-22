@@ -1,0 +1,16 @@
+{
+  "id": "access",
+  "resources": [
+    {
+      "name": "testdb",
+      "resource": "postgresql_access",
+      "attributes": {
+        "type": "host",
+        "database": "testdb",
+        "user": "testuser",
+        "address": "all",
+        "auth_method": "scram-sha-256"
+      }
+    }
+  ]
+}

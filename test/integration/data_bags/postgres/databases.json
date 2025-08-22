@@ -1,0 +1,9 @@
+{
+  "id": "databases",
+  "resources": [
+    {
+      "name": "testdb",
+      "resource": "postgresql_database"
+    }
+  ]
+}

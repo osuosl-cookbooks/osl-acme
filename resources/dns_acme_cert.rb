@@ -9,8 +9,8 @@ property :alt_names, Array, default: []
 property :contact, String, default: lazy { node['acme']['contact'] }
 property :acme_directory, String, default: lazy { node['acme']['dir'] }
 property :acme_dns_api, String, default: lazy { node['osl-acme']['acme-dns']['api'] }
-property :cert_path, String, default: lazy { "/etc/pki/tls/#{domain}.pem" }
-property :key_path, String, default: lazy { "/etc/pki/tls/#{domain}.key" }
+property :cert_path, String, default: lazy { "/etc/pki/tls/#{name}.pem" }
+property :key_path, String, default: lazy { "/etc/pki/tls/#{name}.key" }
 
 action_class do
   require 'openssl'
