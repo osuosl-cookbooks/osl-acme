@@ -1,0 +1,15 @@
+{
+  "id": "users",
+  "resources": [
+    {
+      "name": "testuser",
+      "resource": "postgresql_role",
+      "attributes": {
+        "unencrypted_password": "testpass",
+        "createdb": true,
+        "login": true,
+        "superuser": true
+      }
+    }
+  ]
+}

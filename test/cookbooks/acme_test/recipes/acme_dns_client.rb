@@ -27,27 +27,14 @@ end
 # Setup PostgreSQL server
 #
 
-include_recipe 'osl-postgresql::server'
+osl_postgresql_server 'default' do
+  access 'access'
+  databases 'databases'
+  users 'users'
+  action [:create, :start]
+end
 
 db_config = data_bag_item('osl_acme', 'database')
-
-postgresql_database db_config['dbname']
-
-postgresql_role db_config['user'] do
-  unencrypted_password db_config['pass']
-  login true
-  action :create
-end
-
-# postgresql_access 'local'
-postgresql_access 'local_postgres_user' do
-  type 'local'
-  database 'all'
-  user db_config['user']
-  auth_method 'md5'
-end
-
-osl_firewall_port 'postgres'
 
 cookbook_file '/root/acmedns.sql'
 
