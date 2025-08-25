@@ -23,7 +23,7 @@ connection = "postgres://<%= @pg_user %>:<%= @pg_pass %>@<%= @pg_host %>/<%= @pg
 [api]
 ip = "0.0.0.0"
 disable_registration = false
-port = "80"
+port = "<%= node['osl-acme']['acme-dns']['port'] %>"
 tls = "none"
 corsorigins = [
     "*"
