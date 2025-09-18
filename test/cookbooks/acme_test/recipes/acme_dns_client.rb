@@ -1,6 +1,5 @@
 node.default['osl-acme']['pebble']['always_valid'] = false
 node.default['osl-acme']['pebble']['command'] = '/usr/local/bin/pebble -config /opt/pebble/test/config/pebble-config.json -dnsserver :8053'
-node.default['osl-postgresql']['version'] = '16'
 
 selinux_install 'test-selinux'
 
@@ -23,15 +22,9 @@ template '/var/named/master/db.example.org' do
   notifies :restart, 'bind_service[default]', :immediately
 end
 
-#
-# Setup PostgreSQL server
-#
-
-osl_postgresql_server 'default' do
-  access 'access'
-  databases 'databases'
-  users 'users'
-  action [:create, :start]
+osl_postgresql_test 'acme_dns' do
+  username 'acme_dns'
+  password 'acme_dns'
 end
 
 db_config = data_bag_item('osl_acme', 'database')
