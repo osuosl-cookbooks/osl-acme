@@ -1,7 +1,7 @@
 {
   "id": "database",
   "host": "127.0.0.1",
-  "user": "testuser",
-  "pass": "testpass",
-  "dbname": "testdb"
+  "user": "acme_dns",
+  "pass": "acme_dns",
+  "dbname": "acme_dns"
 }
