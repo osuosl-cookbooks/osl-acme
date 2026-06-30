@@ -36,7 +36,7 @@ action :create do
     private_key = OpenSSL::PKey::RSA.new(2048)
 
     file new_resource.key_path do
-      content private_key.export()
+      content private_key.export
       sensitive true
     end
   end
