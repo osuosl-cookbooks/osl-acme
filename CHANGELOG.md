@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+4.3.3 (2026-07-09)
+------------------
+- cinc: updated kitchen and dokken files
+
 4.3.2 (2025-08-22)
 ------------------
 - AlmaLinux 10 Support
