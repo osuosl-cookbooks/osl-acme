@@ -8,12 +8,12 @@ module OslAcme
 
       # Gets an OpenSSL certificate at `path`, or nil if the file does not exist.
       def get_cert_or_nil(path)
-        return OpenSSL::X509::Certificate.new(File.read(path)) if File.exist?(path)
+        OpenSSL::X509::Certificate.new(File.read(path)) if File.exist?(path)
       end
 
       # Gets an OpenSSL RSA key at `path`, or nil if the file does not exist.
       def get_key_or_nil(path)
-        return OpenSSL::PKey::RSA.new(File.read(path)) if File.exist?(path)
+        OpenSSL::PKey::RSA.new(File.read(path)) if File.exist?(path)
       end
 
       # Creates an ACME client with the provided `private_key`, `directory` and `contact`.
