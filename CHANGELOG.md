@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+4.4.0 (2026-07-24)
+------------------
+- Require acme cookbook 4.2.2 for OpenSSL 3.x compatibility
+
 4.3.3 (2026-07-09)
 ------------------
 - cinc: updated kitchen and dokken files
