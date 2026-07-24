@@ -8,7 +8,7 @@ source_url       'https://github.com/osuosl-cookbooks/osl-acme'
 description      'Installs/Configures osl-acme'
 version          '4.3.3'
 
-depends          'acme', '~> 4.1.4'
+depends          'acme', '~> 4.2.2'
 depends          'osl-firewall'
 depends          'osl-git'
 depends          'osl-selinux'
