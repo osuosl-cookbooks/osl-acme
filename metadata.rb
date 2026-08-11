@@ -12,7 +12,7 @@ depends 'acme', '~> 4.2.2'
 depends 'osl-firewall'
 depends 'osl-git'
 depends 'osl-selinux'
-depends 'resolver', '~> 4.0.2'
+depends 'resolver' 
 
 supports 'almalinux', '~> 10.0'
 supports 'almalinux', '~> 9.0'
