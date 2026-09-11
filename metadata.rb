@@ -12,7 +12,11 @@ depends 'acme', '~> 4.2.2'
 depends 'osl-firewall'
 depends 'osl-git'
 depends 'osl-selinux'
+<<<<<<< HEAD
 depends 'resolver' 
+=======
+depends 'resolver'
+>>>>>>> 06b7595 (update metadata pins)
 
 supports 'almalinux', '~> 10.0'
 supports 'almalinux', '~> 9.0'
