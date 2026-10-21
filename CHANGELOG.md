@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+4.4.2 (2026-10-21)
+------------------
+- Leave the resolver pin to base
+
 4.4.1 (2026-09-21)
 ------------------
 - chef 19 update
