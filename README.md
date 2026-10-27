@@ -1,39 +1,33 @@
 osl-acme Cookbook
 =================
 
-OSL wrapper cookbook for ACME (LetsEncrypt) utilizing the
-[acme](https://supermarket.chef.io/cookbooks/acme) and
-[osl-letsencrypt-boulder-server](https://github.com/osuosl-cookbooks/osl-letsencrypt-boulder-server)
-cookbooks.
+OSL wrapper cookbook for ACME (Let's Encrypt), built on the
+[acme](https://supermarket.chef.io/cookbooks/acme) cookbook.
 
 Requirements
 ------------
 
- - Chef 12.18.x and higher
-
-Attributes
-----------
+- Cinc Client 16 or later
+- AlmaLinux 8, 9 and 10
 
 Usage
 -----
+
 #### osl-acme::default
 
-This includes the default recipe for the acme cookbook and sets the contact
-information to our default email.
+Includes the acme cookbook's default recipe and sets the contact address to
+`letsencrypt@osuosl.org` and renewal to 32 days before expiry. Callers then use
+`acme_certificate` for HTTP-01 certificates.
 
 #### osl-acme::server
 
-This installs and starts [Boulder](https://github.com/letsencrypt/boulder) which
-is the CA server behind LetsEncrypt. This allows us to do full test integration
-for LetsEncrypt.
+Installs and starts [Pebble](https://github.com/letsencrypt/pebble), Let's
+Encrypt's small test CA, with dnsmasq resolving the names in
+`node['osl-acme']['pebble']['host_aliases']` to the node. Other cookbooks' test
+suites include it to issue certificates in kitchen.
 
-  NOTE: This recipe should NEVER be used in production. It is only used for
-  testing.
-
-#### osl-acme::acme_dns_server
-
-This installs and starts [acme-dns](https://github.com/joohoi/acme-dns) which
-streamlines ACME's DNS challenge process.
+  NOTE: This recipe should NEVER be used in production. It adds Pebble's test
+  CA to the Cinc trust store.
 
 Contributing
 ------------
