@@ -24,4 +24,19 @@ ALL_PLATFORMS = [
 
 RSpec.configure do |config|
   config.log_level = :warn
+  config.file_cache_path = '/var/chef/cache'
+end
+
+# A self-signed certificate and its key, for the publish and helper specs
+def osl_acme_test_pair(cn = 'test.example.org')
+  key = OpenSSL::PKey::RSA.new(2048)
+  cert = OpenSSL::X509::Certificate.new
+  cert.version = 2
+  cert.serial = rand(1..2**32)
+  cert.subject = cert.issuer = OpenSSL::X509::Name.parse("/CN=#{cn}")
+  cert.public_key = key.public_key
+  cert.not_before = Time.now
+  cert.not_after = Time.now + 86_400
+  cert.sign(key, OpenSSL::Digest.new('SHA256'))
+  [cert.to_pem, key.to_pem]
 end
