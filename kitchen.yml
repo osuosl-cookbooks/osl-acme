@@ -14,12 +14,16 @@ provisioner:
   enforce_idempotency: true
   multiple_converge: 2
   deprecations_as_errors: true
+  data_bags_path: test/integration/data_bags
+  encrypted_data_bag_secret_key_path: test/integration/encrypted_data_bag_secret
   attributes:
     osl-selinux:
       enforcing: true
 
 platforms:
   - name: almalinux-8
+  - name: almalinux-9
+  - name: almalinux-10
 
 suites:
   - name: default
@@ -34,3 +38,20 @@ suites:
         pebble:
           host_aliases:
             - foo.org
+  - name: lego
+    excludes:
+      - almalinux-8
+    run_list:
+      - recipe[acme_test::lego]
+      - recipe[acme_test::lego_consumer]
+    attributes:
+      osl-acme:
+        pebble:
+          always_valid: false
+          command: /usr/local/bin/pebble -config /opt/pebble/test/config/pebble-config.json -dnsserver 127.0.0.2:53
+  - name: lego-delete
+    # util1, the only lego node, runs EL9
+    excludes:
+      - almalinux-8
+    run_list:
+      - recipe[acme_test::lego_delete]

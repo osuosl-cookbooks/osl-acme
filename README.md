@@ -29,6 +29,18 @@ suites include it to issue certificates in kitchen.
   NOTE: This recipe should NEVER be used in production. It adds Pebble's test
   CA to the Cinc trust store.
 
+Resources
+---------
+
+For names served by more than one node, where HTTP-01 can't work, util1 issues
+certificates with lego over DNS-01 against osl-dns's dynamic zone and publishes
+them to the `acme_certs` data bag:
+
+- [osl_acme_lego](documentation/osl_acme_lego.md): installs lego and its shared
+  settings
+- [osl_acme_lego_cert](documentation/osl_acme_lego_cert.md): issues, renews and
+  publishes one certificate
+
 Contributing
 ------------
 
