@@ -23,9 +23,13 @@ information to our default email.
 
 #### osl-acme::server
 
-This installs and starts [Boulder](https://github.com/letsencrypt/boulder) which
-is the CA server behind LetsEncrypt. This allows us to do full test integration
-for LetsEncrypt.
+This installs and starts [Pebble](https://github.com/letsencrypt/pebble), Let's
+Encrypt's small ACME test server, with dnsmasq resolving the test names, so
+kitchen can issue certificates end to end.
+
+Pebble keeps its ACME accounts in memory, so every time it starts (a reboot
+included) the unit deletes the saved account key, and the next converge
+registers a new account instead of failing with `AccountDoesNotExist`.
 
   NOTE: This recipe should NEVER be used in production. It is only used for
   testing.
