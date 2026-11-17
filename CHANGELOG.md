@@ -3,6 +3,10 @@ osl-acme CHANGELOG
 This file is used to list changes made in each version of the
 osl-acme cookbook.
 
+4.4.3 (2026-11-17)
+------------------
+- server: drop the ACME account key when Pebble starts
+
 4.4.2 (2026-10-21)
 ------------------
 - Leave the resolver pin to base
