@@ -70,6 +70,8 @@ bash 'update Chef trusted certificates store' do
   creates "/opt/#{chef_path}/embedded/ssl/certs/PEBBLE-MINICA-IS-INSTALLED"
 end
 
+# Pebble keeps ACME accounts in memory, so a restart orphans the saved account
+# key; dropping it (as root, "+") lets acme register a new account next run.
 systemd_unit 'pebble.service' do
   content <<~EOF
     [Unit]
@@ -83,6 +85,7 @@ systemd_unit 'pebble.service' do
     Environment=PEBBLE_VA_NOSLEEP=1
     Environment=PEBBLE_WFE_NONCEREJECT=0
     ExecStart=#{node['osl-acme']['pebble']['command']}
+    ExecStartPost=+/bin/rm -f #{node['acme']['private_key_file']}
 
     [Install]
     WantedBy=multi-user.target
