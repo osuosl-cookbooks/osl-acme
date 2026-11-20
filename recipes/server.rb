@@ -39,7 +39,7 @@ resolver_config '/etc/resolver.conf' do
   nameservers %w(127.0.0.1)
 end
 
-include_recipe 'git'
+include_recipe 'osl-git'
 
 remote_file '/usr/local/bin/pebble' do
   source "https://github.com/letsencrypt/pebble/releases/download/#{node['osl-acme']['pebble']['version']}/pebble_linux-amd64"
